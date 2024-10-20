@@ -20,3 +20,15 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/fonts/
+    - assets/images/
+
+  fonts:
+    - family: NunitoSans
+      fonts:
+      - asset: assets/fonts/NunitoSans_10pt-Regular.ttf
+      - asset: assets/fonts/NunitoSans_10pt-Bold.ttf
+        weight: 700
+
