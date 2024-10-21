@@ -1,3 +1,4 @@
+import 'package:flood_monitor/utils/color.dart';
 import 'package:flutter/material.dart';
 
 class CustomTabExample extends StatelessWidget {
@@ -12,11 +13,12 @@ class CustomTabExample extends StatelessWidget {
             // TabBar tanpa AppBar
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(60),
+                borderRadius: BorderRadius.circular(160), // Tumpulkan TabBar
               ),
               child: TabBar(
                 labelColor: const Color.fromARGB(
                     255, 0, 0, 0), // Warna teks saat tab aktif
+
                 unselectedLabelColor:
                     Colors.black, // Warna teks saat tab tidak aktif
                 indicatorColor: const Color.fromARGB(
@@ -47,54 +49,144 @@ class StatusTerakhirTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: ListView(
-      children: [
-        ListTile(
-          title: Text('Titik Pantau Klego (02-Okt-2024 14:00)'),
-          subtitle: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Image.asset(
-                'assets/images/example.png', // Gambar yang ingin ditampilkan
-                width: 120, // Lebar gambar
-                height: 120, // Tinggi gambar
-              ),
-
-              SizedBox(width: 10), // Jarak antara teks dan gambar
-              Expanded(
+      padding: EdgeInsets.all(8), // Beri padding agar tampilan lebih rapi
+      child: ListView(
+        children: [
+          Container(
+            margin: EdgeInsets.only(bottom: 10), // Jarak antar ListTile
+            child: ListTile(
+              title: Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: kprimarySecond,
+                ),
                 child: Text(
-                  'Status: Siaga\nKetinggian Air: 1120 cm\nCurah Hujan: 5 mm\nKecepatan Angin: 7 km/h',
-                  style: TextStyle(color: Colors.red),
+                  'Titik Pantau Klego (02-Okt-2024 14:00)',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
-            ],
-          ),
-        ),
-        ListTile(
-          title: Text('Titik Pantau Yosorejo (02-Okt-2024 14:00)'),
-          subtitle: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                height: 20,
-              ),
-              Image.asset(
-                'assets/images/example.png', // Gambar yang ingin ditampilkan
-                width: 120,
-                height: 120,
-              ),
-              SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  'Status: Aman\nKetinggian Air: 140 cm\nCurah Hujan: 5 mm\nKecepatan Angin: 7 km/h',
-                  style: TextStyle(color: Colors.green),
+              subtitle: Padding(
+                padding: EdgeInsets.only(
+                    top:
+                        10), // Menambahkan jarak vertikal antara title dan subtitle
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Image.asset(
+                      'assets/images/example.png', // Gambar yang ingin ditampilkan
+                      width: 100, // Lebar gambar
+                      height: 100, // Tinggi gambar
+                    ),
+                    SizedBox(width: 10), // Jarak antara teks dan gambar
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start, // Membuat teks rata kiri
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment
+                                .spaceBetween, // Pisahkan label dan nilai
+                            children: [
+                              Text(
+                                'Status:',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                  // Beri cetak tebal pada label
+                                ),
+                              ),
+                              Text(
+                                'Siaga',
+                                style: TextStyle(
+                                  color:
+                                      const Color.fromARGB(255, 255, 103, 14),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 5), // Memberi jarak antara baris
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment
+                                .spaceBetween, // Pisahkan label dan nilai
+                            children: [
+                              Text(
+                                'Ketinggian Air:',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Text(
+                                '120 cm',
+                                style: TextStyle(
+                                  color: const Color.fromARGB(255, 202, 27, 27),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 5),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment
+                                .spaceBetween, // Pisahkan label dan nilai
+                            children: [
+                              Text(
+                                'Curah Hujan:',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Text(
+                                '5 mm',
+                                style: TextStyle(
+                                  color: const Color.fromARGB(255, 46, 185, 0),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 5),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment
+                                .spaceBetween, // Pisahkan label dan nilai
+                            children: [
+                              Text(
+                                'Kecepatan Angin:',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Text(
+                                '7 km/h',
+                                style: TextStyle(
+                                  color: const Color.fromARGB(255, 46, 185, 0),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
-        ),
-      ],
-    ));
+        ],
+      ),
+    );
   }
 }
 

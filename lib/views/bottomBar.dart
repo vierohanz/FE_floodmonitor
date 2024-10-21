@@ -14,6 +14,8 @@ class BottomBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
+        backgroundColor:
+            Color(0xFFEBF0F7), // Menggunakan warna heksadesimal #EBF0F7
         body: Container(
           margin: const EdgeInsets.all(16.0), // Set margin for PageView
           child: PageView(
