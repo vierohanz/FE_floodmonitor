@@ -26,7 +26,7 @@ class KetinggianAir extends StatelessWidget {
             child: Text(
               'Ketinggian Air',
               style: TextStyle(
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
@@ -70,23 +70,23 @@ class KetinggianAir extends StatelessWidget {
                       getTitlesWidget: (value, meta) {
                         switch (value.toInt()) {
                           case 0:
-                            return Text('24');
+                            return Text('24', style: TextStyle(fontSize: 13));
                           case 1:
-                            return Text('25');
+                            return Text('25', style: TextStyle(fontSize: 13));
                           case 2:
-                            return Text('26');
+                            return Text('26', style: TextStyle(fontSize: 13));
                           case 3:
-                            return Text('27');
+                            return Text('27', style: TextStyle(fontSize: 13));
                           case 4:
-                            return Text('28');
+                            return Text('28', style: TextStyle(fontSize: 13));
                           case 5:
-                            return Text('29');
+                            return Text('29', style: TextStyle(fontSize: 13));
                           case 6:
-                            return Text('30');
+                            return Text('30', style: TextStyle(fontSize: 13));
                           case 7:
-                            return Text('31');
+                            return Text('31', style: TextStyle(fontSize: 13));
                           case 8:
-                            return Text('01');
+                            return Text('01', style: TextStyle(fontSize: 13));
                         }
                         return Text('');
                       },
@@ -95,9 +95,10 @@ class KetinggianAir extends StatelessWidget {
                   leftTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
-                      reservedSize: 50,
+                      reservedSize: 30,
                       getTitlesWidget: (value, meta) {
-                        return Text(value.toStringAsFixed(2));
+                        return Text(value.toStringAsFixed(0),
+                            style: TextStyle(fontSize: 12));
                       },
                     ),
                   ),

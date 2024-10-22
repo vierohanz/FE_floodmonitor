@@ -14,28 +14,28 @@ class homePage extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false, // Menghilangkan banner debug
       home: Scaffold(
-        backgroundColor:
-            Color(0xFFEBF0F7), // Menggunakan warna heksadesimal #EBF0F7
-        body: Container(
-            child: Container(
-          child: Column(
-            children: [
-              WaterLevelCard(
-                currentHeight: 154, // Ketinggian air saat ini
-                predictedHeight: 126, // Prediksi ketinggian air
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                child: Expanded(
-                  child: ObjekTab(), // Panggil TabExample di sini
+          backgroundColor:
+              Color(0xFFEBF0F7), // Menggunakan warna heksadesimal #EBF0F7
+          body: Container(
+            padding: EdgeInsets.all(25),
+            child: Column(
+              children: [
+                WaterLevelCard(
+                  currentHeight: 154, // Ketinggian air saat ini
+                  predictedHeight: 126, // Prediksi ketinggian air
                 ),
-              ),
-            ],
-          ),
-        )),
-      ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  child: Expanded(
+                    child: Container(
+                        child: ObjekTab()), // Panggil TabExample di sini
+                  ),
+                ),
+              ],
+            ),
+          )),
     );
   }
 }
