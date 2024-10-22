@@ -9,7 +9,6 @@ import '../controllers/bottomBarController.dart';
 
 class BottomBarWidget extends StatelessWidget {
   final bottomBarC = Get.find<bottomBarController>();
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -29,7 +28,7 @@ class BottomBarWidget extends StatelessWidget {
           ),
         ),
         bottomNavigationBar: Obx(() => Container(
-              margin: const EdgeInsets.symmetric(horizontal: 15),
+              margin: const EdgeInsets.symmetric(horizontal: 17),
               child: BottomBar(
                 selectedIndex: bottomBarC.model.currentPage.value,
                 onTap: (int index) {
