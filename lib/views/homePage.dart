@@ -1,6 +1,7 @@
 import 'package:flood_monitor/utils/color.dart';
-import 'package:flood_monitor/views/Objek/ObjekTab.dart';
-import 'package:flood_monitor/views/Objek/waterlevelcard.dart';
+import './component/ObjekTab.dart';
+import 'component/WaterLevel.dart';
+import 'package:flood_monitor/views/component/WaterLevel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

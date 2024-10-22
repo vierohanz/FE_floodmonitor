@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flood_monitor/utils/color.dart';
-import 'package:flood_monitor/views/Objek/ObjekGrafik/CurahHujan.dart';
-import 'package:flood_monitor/views/Objek/ObjekGrafik/KetinggianAir.dart';
+import 'grafik/CurahHujan.dart';
+import 'grafik/KetinggianAir.dart';
 import 'package:flutter/material.dart';
 
 class ObjekTab extends StatelessWidget {

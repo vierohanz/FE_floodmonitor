@@ -1,3 +1,4 @@
+import 'package:flood_monitor/utils/color.dart';
 import 'package:flood_monitor/views/homePage.dart';
 import 'package:flood_monitor/views/messagePage.dart';
 import 'package:flood_monitor/views/profilePage.dart';
@@ -7,30 +8,26 @@ import 'package:get/get.dart';
 import 'package:bottom_bar/bottom_bar.dart';
 import '../controllers/bottomBarController.dart';
 
-class BottomBarWidget extends StatelessWidget {
-  final bottomBarC = Get.find<bottomBarController>();
+class bottomBar extends StatelessWidget {
+  final bottomBarC = Get.put(bottomBarController());
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
-        backgroundColor:
-            Color(0xFFEBF0F7), // Menggunakan warna heksadesimal #EBF0F7
-        body: Container(
-          margin: const EdgeInsets.all(16.0), // Set margin for PageView
-          child: PageView(
-            controller: bottomBarC.pageController,
-            children: [
-              homePage(),
-              messagePage(),
-              profilePage(),
-            ],
-            onPageChanged: (index) {
-              bottomBarC.changePage(index);
-            },
-          ),
+        body: PageView(
+          controller: bottomBarC.pageController,
+          children: [
+            homePage(),
+            messagePage(),
+            profilePage(),
+          ],
+          onPageChanged: (index) {
+            bottomBarC.changePage(index);
+          },
         ),
         bottomNavigationBar: Obx(() => Container(
-              margin: const EdgeInsets.symmetric(horizontal: 17),
+              color: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 17),
               child: BottomBar(
                 selectedIndex: bottomBarC.model.currentPage.value,
                 onTap: (int index) {

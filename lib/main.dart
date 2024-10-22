@@ -17,7 +17,7 @@ class MainApp extends StatelessWidget {
       getPages: [
         GetPage(
           name: '/',
-          page: () => BottomBarWidget(),
+          page: () => bottomBar(),
           binding: BindingsBuilder(() {
             Get.put(bottomBarController());
           }),
