@@ -20,6 +20,9 @@ class homePage extends StatelessWidget {
             child: Container(
           child: Column(
             children: [
+              SizedBox(
+                height: 20,
+              ),
               WaterLevelCard(
                 currentHeight: 154, // Ketinggian air saat ini
                 predictedHeight: 126, // Prediksi ketinggian air
