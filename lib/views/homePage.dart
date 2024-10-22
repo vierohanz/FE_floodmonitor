@@ -1,6 +1,6 @@
 import 'package:flood_monitor/utils/color.dart';
-import 'package:flood_monitor/view/TabExample.dart';
-import 'package:flood_monitor/view/waterlevelcard.dart';
+import 'package:flood_monitor/views/Objek/ObjekTab.dart';
+import 'package:flood_monitor/views/Objek/waterlevelcard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -28,7 +28,7 @@ class homePage extends StatelessWidget {
               ),
               Container(
                 child: Expanded(
-                  child: CustomTabExample(), // Panggil TabExample di sini
+                  child: ObjekTab(), // Panggil TabExample di sini
                 ),
               ),
             ],
