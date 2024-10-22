@@ -1,9 +1,5 @@
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flood_monitor/utils/color.dart';
 import 'package:flood_monitor/views/component/grafik/GrafikParent.dart';
-import 'package:flood_monitor/views/component/status/StatusTerakhir.dart';
-import 'grafik/CurahHujan.dart';
-import 'grafik/KetinggianAir.dart';
+import 'package:flood_monitor/views/component/status/StatusParent.dart';
 import 'package:flutter/material.dart';
 
 class ObjekTab extends StatelessWidget {
@@ -17,9 +13,9 @@ class ObjekTab extends StatelessWidget {
           children: [
             // TabBar tanpa AppBar
             Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(160), // Tumpulkan TabBar
-              ),
+              // decoration: BoxDecoration(
+              //   borderRadius: BorderRadius.circular(160), // Tumpulkan TabBar
+              // ),
               child: TabBar(
                 labelColor: const Color.fromARGB(
                     255, 0, 0, 0), // Warna teks saat tab aktif
@@ -38,7 +34,7 @@ class ObjekTab extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  StatusTerakhirTab(), // Konten untuk tab Status Terakhir
+                  StatusParent(), // Konten untuk tab Status Terakhir
                   GrafikTab(), // Konten untuk tab Grafik
                 ],
               ),

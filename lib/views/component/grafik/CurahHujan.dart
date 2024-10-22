@@ -19,8 +19,8 @@ class CurahHujan extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.blue, // ganti dengan kprimarySecond jika ada
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(3),
-                topRight: Radius.circular(3),
+                topLeft: Radius.circular(5),
+                topRight: Radius.circular(5),
               ),
             ),
             child: Text(
