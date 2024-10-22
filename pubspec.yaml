@@ -12,6 +12,7 @@ dependencies:
   get: 4.6.6
   bottom_bar: ^2.0.3
   font_awesome_flutter: ^10.7.0
+  fl_chart: ^0.69.0
 
 dev_dependencies:
   flutter_test:
