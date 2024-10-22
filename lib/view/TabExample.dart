@@ -60,6 +60,12 @@ class StatusTerakhirTab extends StatelessWidget {
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: kprimarySecond,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(3), // Sudut kiri atas tumpul
+                    topRight: Radius.circular(3), // Sudut kanan atas tumpul
+                    bottomLeft: Radius.circular(0), // Sudut kiri bawah tajam
+                    bottomRight: Radius.circular(0), // Sudut kanan bawah tajam
+                  ),
                 ),
                 child: Text(
                   'Titik Pantau Klego (02-Okt-2024 14:00)',
@@ -206,6 +212,12 @@ class GrafikTab extends StatelessWidget {
             padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: kprimarySecond,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(3), // Sudut kiri atas tumpul
+                topRight: Radius.circular(3), // Sudut kanan atas tumpul
+                bottomLeft: Radius.circular(0), // Sudut kiri bawah tajam
+                bottomRight: Radius.circular(0), // Sudut kanan bawah tajam
+              ),
             ),
             child: Text(
               'Curah Hujan',
