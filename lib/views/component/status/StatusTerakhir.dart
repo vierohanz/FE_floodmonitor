@@ -55,7 +55,7 @@ class StatusTerakhirTab extends StatelessWidget {
                               Text(
                                 'Status:',
                                 style: TextStyle(
-                                  fontSize: 12,
+                                  fontSize: 13,
                                   color: Colors.black,
                                   // Beri cetak tebal pada label
                                 ),
@@ -64,9 +64,9 @@ class StatusTerakhirTab extends StatelessWidget {
                                 'Siaga',
                                 style: TextStyle(
                                   color:
-                                      const Color.fromARGB(255, 255, 103, 12),
+                                      const Color.fromARGB(255, 255, 103, 13),
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 12,
+                                  fontSize: 13,
                                 ),
                               ),
                             ],
@@ -79,7 +79,7 @@ class StatusTerakhirTab extends StatelessWidget {
                               Text(
                                 'Ketinggian Air:',
                                 style: TextStyle(
-                                  fontSize: 12,
+                                  fontSize: 13,
                                   color: Colors.black,
                                 ),
                               ),
@@ -88,7 +88,7 @@ class StatusTerakhirTab extends StatelessWidget {
                                 style: TextStyle(
                                   color: const Color.fromARGB(255, 202, 27, 27),
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 12,
+                                  fontSize: 13,
                                 ),
                               ),
                             ],
@@ -101,7 +101,7 @@ class StatusTerakhirTab extends StatelessWidget {
                               Text(
                                 'Curah Hujan:',
                                 style: TextStyle(
-                                  fontSize: 12,
+                                  fontSize: 13,
                                   color: Colors.black,
                                 ),
                               ),
@@ -110,7 +110,7 @@ class StatusTerakhirTab extends StatelessWidget {
                                 style: TextStyle(
                                   color: const Color.fromARGB(255, 46, 185, 0),
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 12,
+                                  fontSize: 13,
                                 ),
                               ),
                             ],
@@ -123,7 +123,7 @@ class StatusTerakhirTab extends StatelessWidget {
                               Text(
                                 'Kecepatan Angin:',
                                 style: TextStyle(
-                                  fontSize: 12,
+                                  fontSize: 13,
                                   color: Colors.black,
                                 ),
                               ),
@@ -132,7 +132,7 @@ class StatusTerakhirTab extends StatelessWidget {
                                 style: TextStyle(
                                   color: const Color.fromARGB(255, 46, 185, 0),
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 12,
+                                  fontSize: 13,
                                 ),
                               ),
                             ],
