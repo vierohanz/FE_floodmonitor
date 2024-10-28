@@ -11,12 +11,14 @@ class appBarController extends GetxController {
     date: DateTime.now(),
   ).obs;
 
-  void changeLocation() {
-    currentIndex.value = (currentIndex.value + 1) % locations.length;
-    appBarM.value = appBarModel(
-      location: locations[currentIndex.value],
-      date: DateTime.now(),
-    );
+  void changeLocation({Duration duration = const Duration(seconds: 1)}) {
+    Future.delayed(duration, () {
+      currentIndex.value = (currentIndex.value + 1) % locations.length;
+      appBarM.value = appBarModel(
+        location: locations[currentIndex.value],
+        date: DateTime.now(),
+      );
+    });
   }
 
   String getFormattedDate() {

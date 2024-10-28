@@ -14,16 +14,12 @@ class ObjekTab extends StatelessWidget {
             // TabBar tanpa AppBar
             Container(
               // decoration: BoxDecoration(
-              //   borderRadius: BorderRadius.circular(160), // Tumpulkan TabBar
+              //   borderRadius: BorderRadius.circular(20),
               // ),
               child: TabBar(
-                labelColor: const Color.fromARGB(
-                    255, 0, 0, 0), // Warna teks saat tab aktif
-
-                unselectedLabelColor:
-                    Colors.black, // Warna teks saat tab tidak aktif
-                indicatorColor: const Color.fromARGB(
-                    255, 0, 132, 255), // Warna indikator tab
+                labelColor: const Color.fromARGB(255, 0, 0, 0),
+                unselectedLabelColor: Colors.black,
+                indicatorColor: const Color.fromARGB(255, 0, 132, 255),
                 tabs: [
                   Tab(text: 'Status Terakhir'),
                   Tab(text: 'Grafik'),

@@ -5,8 +5,10 @@ class StatusTerakhirTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hp = MediaQuery.of(context).size.height;
+    final wp = MediaQuery.of(context).size.width;
     return Container(
-      margin: EdgeInsets.only(bottom: 10), // Jarak antar ListTile
+      margin: EdgeInsets.only(bottom: 10, top: 14), // Jarak antar ListTile
       child: ListTile(
         title: Container(
           padding: EdgeInsets.all(10),
@@ -22,7 +24,7 @@ class StatusTerakhirTab extends StatelessWidget {
           child: Text(
             'Titik Pantau Klego (02-Okt-2024 14:00)',
             style: TextStyle(
-              fontSize: 14,
+              fontSize: hp * 0.014,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
@@ -52,7 +54,7 @@ class StatusTerakhirTab extends StatelessWidget {
                         Text(
                           'Status:',
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: hp * 0.015,
                             color: Colors.black,
                             // Beri cetak tebal pada label
                           ),
@@ -62,7 +64,7 @@ class StatusTerakhirTab extends StatelessWidget {
                           style: TextStyle(
                             color: const Color.fromARGB(255, 255, 103, 14),
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,
+                            fontSize: hp * 0.015,
                           ),
                         ),
                       ],
@@ -75,7 +77,7 @@ class StatusTerakhirTab extends StatelessWidget {
                         Text(
                           'Ketinggian Air:',
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: hp * 0.015,
                             color: Colors.black,
                           ),
                         ),
@@ -84,7 +86,7 @@ class StatusTerakhirTab extends StatelessWidget {
                           style: TextStyle(
                             color: const Color.fromARGB(255, 202, 27, 27),
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,
+                            fontSize: hp * 0.015,
                           ),
                         ),
                       ],
@@ -97,7 +99,7 @@ class StatusTerakhirTab extends StatelessWidget {
                         Text(
                           'Curah Hujan:',
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: hp * 0.015,
                             color: Colors.black,
                           ),
                         ),
@@ -106,7 +108,7 @@ class StatusTerakhirTab extends StatelessWidget {
                           style: TextStyle(
                             color: const Color.fromARGB(255, 46, 185, 0),
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,
+                            fontSize: hp * 0.015,
                           ),
                         ),
                       ],
@@ -119,7 +121,7 @@ class StatusTerakhirTab extends StatelessWidget {
                         Text(
                           'Kecepatan Angin:',
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: hp * 0.015,
                             color: Colors.black,
                           ),
                         ),
@@ -128,7 +130,7 @@ class StatusTerakhirTab extends StatelessWidget {
                           style: TextStyle(
                             color: const Color.fromARGB(255, 46, 185, 0),
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,
+                            fontSize: hp * 0.015,
                           ),
                         ),
                       ],

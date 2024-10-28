@@ -5,13 +5,30 @@ import 'package:get/get.dart';
 
 class appBar extends StatelessWidget {
   final appBarC = Get.put(appBarController());
-  final appBarIconC = Get.put(AppBarIconController());
+  final appBarIconC = Get.put(appBarIconController());
   Widget build(BuildContext context) {
     final hp = MediaQuery.of(context).size.height;
     final wp = MediaQuery.of(context).size.width;
     return Container(
       height: hp * 0.19,
       decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            offset: const Offset(
+              5.0,
+              5.0,
+            ),
+            blurRadius: 6.0,
+            spreadRadius: 1.0,
+          ), //BoxShadow
+          BoxShadow(
+            color: Colors.white,
+            offset: const Offset(0.0, 0.0),
+            blurRadius: 0.0,
+            spreadRadius: 0.0,
+          ), //BoxShadow
+        ],
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(25),
           bottomRight: Radius.circular(25),
@@ -40,7 +57,7 @@ class appBar extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(15))),
               child: Center(
                   child: Text(
-                "SIAGA",
+                "BANJIR",
                 style: TextStyle(
                     fontFamily: "NunitoSans",
                     fontWeight: FontWeight.bold,
@@ -85,13 +102,18 @@ class appBar extends StatelessWidget {
                   Container(
                     width: wp * 0.1,
                     child: IconButton(
-                      icon: RotationTransition(
-                        turns: appBarIconC.rotationAnimation,
-                        child: Transform.translate(
-                          offset:
-                              Offset(0, appBarIconC.verticalAnimation.value),
-                          child: Icon(Icons.repeat, color: Colors.white),
-                        ),
+                      icon: AnimatedBuilder(
+                        animation: appBarIconC.animationController,
+                        builder: (context, child) {
+                          return Transform(
+                            alignment: Alignment.center,
+                            transform: Matrix4.rotationZ(
+                                appBarIconC.rotationAnimation.value *
+                                    2 *
+                                    3.14159),
+                            child: Icon(Icons.repeat, color: Colors.white),
+                          );
+                        },
                       ),
                       onPressed: () => [
                         appBarIconC.onIconPressed(),
