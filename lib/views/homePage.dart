@@ -19,8 +19,7 @@ class homePage extends StatelessWidget {
         backgroundColor: Color(0xFFEBF0F7),
         body: Container(
           width: wp,
-          height: hp * 1,
-          padding: EdgeInsets.only(top: 12, right: 28, left: 28, bottom: 10),
+          padding: EdgeInsets.only(top: 12, right: 22, left: 22, bottom: 10),
           child: Column(
             children: [
               Container(
@@ -80,7 +79,7 @@ class homePage extends StatelessWidget {
               ),
               SizedBox(height: 20),
               Container(
-                height: hp * 0.33,
+                height: hp * 0.316,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(13),
