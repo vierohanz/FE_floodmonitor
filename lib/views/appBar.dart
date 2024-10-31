@@ -10,14 +10,14 @@ class appBar extends StatelessWidget {
     final hp = MediaQuery.of(context).size.height;
     final wp = MediaQuery.of(context).size.width;
     return Container(
-      height: hp * 0.19,
+      height: hp * 0.18,
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
             color: Colors.grey,
             offset: const Offset(
-              5.0,
-              5.0,
+              3.0,
+              3.0,
             ),
             blurRadius: 6.0,
             spreadRadius: 1.0,

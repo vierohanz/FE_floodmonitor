@@ -23,8 +23,8 @@ class bottomBar extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(color: Color(0xFFEBF0F7)),
         child: Container(
-          height: hp * 0.728,
           child: PageView(
+            physics: NeverScrollableScrollPhysics(),
             controller: bottomBarC.pageController,
             children: [
               homePage(),
@@ -49,7 +49,7 @@ class bottomBar extends StatelessWidget {
                 ),
               ],
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 17),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: BottomBar(
               selectedIndex: bottomBarC.model.currentPage.value,
               onTap: (int index) {
