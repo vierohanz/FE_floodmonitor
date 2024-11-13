@@ -79,7 +79,7 @@ class homePage extends StatelessWidget {
               ),
               SizedBox(height: 20),
               Container(
-                height: hp * 0.316,
+                height: hp * 0.33,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(13),
