@@ -66,7 +66,7 @@ class appBar extends StatelessWidget {
               )),
             ),
             Container(
-              width: wp * 0.45,
+              width: wp * 0.47,
               height: hp * 1,
               margin: EdgeInsets.only(top: 7, left: 40, bottom: 7),
               child: Row(
