@@ -42,7 +42,7 @@ class appBar extends StatelessWidget {
         margin: EdgeInsets.only(
             top: hp * 0.065,
             left: wp * 0.04,
-            right: wp * 0.04,
+            right: wp * 0.02,
             bottom: hp * 0.03),
         height: hp * 0.1,
         width: wp * 1,

@@ -52,12 +52,7 @@ class CurahHujan extends StatelessWidget {
                       FlSpot(7, 20),
                       FlSpot(8, 30),
                     ],
-                    color: const Color.fromARGB(255, 255, 255, 255),
-                    gradient: LinearGradient(colors: [
-                      Colors.lightBlueAccent,
-                      Colors.purpleAccent,
-                      Colors.red,
-                    ]),
+                    color: const Color.fromARGB(255, 52, 136, 255),
                     isCurved: false,
                     barWidth: 1,
                   ),

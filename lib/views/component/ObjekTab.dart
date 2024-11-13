@@ -9,16 +9,19 @@ class ObjekTab extends StatelessWidget {
       length: 2,
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(13))),
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(13)),
+        ),
         child: Column(
           children: [
             Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(13),
-                      topRight: Radius.circular(13))),
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(13),
+                  topRight: Radius.circular(13),
+                ),
+              ),
               child: TabBar(
                 labelColor: const Color.fromARGB(255, 0, 0, 0),
                 unselectedLabelColor: Colors.black,
@@ -29,7 +32,7 @@ class ObjekTab extends StatelessWidget {
                 ],
               ),
             ),
-            // TabBarView untuk konten masing-masing tab
+            // Menggunakan Expanded agar TabBarView mengambil lebih banyak ruang
             Expanded(
               child: TabBarView(
                 children: [
@@ -46,5 +49,5 @@ class ObjekTab extends StatelessWidget {
 }
 
 void main() {
-  runApp(ObjekTab());
+  runApp(MaterialApp(home: Scaffold(body: ObjekTab())));
 }

@@ -52,12 +52,7 @@ class KetinggianAir extends StatelessWidget {
                       FlSpot(7, 80),
                       FlSpot(8, 70),
                     ],
-                    color: Colors.red,
-                    gradient: LinearGradient(colors: [
-                      Colors.lightBlueAccent,
-                      Colors.purpleAccent,
-                      Colors.red,
-                    ]),
+                    color: Colors.blueAccent,
                     isCurved: false,
                     barWidth: 1,
                   ),
