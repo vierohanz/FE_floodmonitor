@@ -9,6 +9,7 @@ class StatusParent extends StatelessWidget {
     return ListView(
       children: [
         StatusTerakhirTab(),
+        StatusTerakhirTab(),
       ],
     );
   }
