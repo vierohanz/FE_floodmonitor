@@ -1,10 +1,10 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-class CurahHujan extends StatelessWidget {
+class KecepetanAngin extends StatelessWidget {
   final List<Map<String, dynamic>> data; // Data dari API
 
-  const CurahHujan({required this.data, super.key});
+  const KecepetanAngin({required this.data, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class CurahHujan extends StatelessWidget {
               ),
             ),
             child: Text(
-              'Curah Hujan',
+              'Kecepatan Angin',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
@@ -51,9 +51,17 @@ class CurahHujan extends StatelessWidget {
                         LineChartBarData(
                           spots: data.asMap().entries.map((entry) {
                             final index = entry.key.toDouble();
-                            final rainfall =
-                                double.tryParse(entry.value['rainfall']) ?? 0.0;
-                            return FlSpot(index, rainfall);
+                            final wind_speed = entry.value['wind_speed'];
+                            if (wind_speed == null || wind_speed.isEmpty) {
+                              // Tangani jika 'water_level' null atau kosong
+                              return FlSpot(index,
+                                  0.0); // Bisa menggunakan nilai default, misal 0.0
+                            } else {
+                              final wind_speedDouble =
+                                  double.tryParse(wind_speed) ??
+                                      0.0; // Parsing aman
+                              return FlSpot(index, wind_speedDouble);
+                            }
                           }).toList(),
                           color: const Color.fromARGB(255, 52, 136, 255),
                           isCurved: false,
@@ -129,8 +137,7 @@ class CurahHujan extends StatelessWidget {
                       minX: 0,
                       maxX: (data.length - 1).toDouble(),
                       minY: 0,
-                      maxY:
-                          150, // Sesuaikan dengan rentang curah hujan maksimal
+                      maxY: 40, // Sesuaikan dengan rentang curah hujan maksimal
                     ),
                   ),
                 ),

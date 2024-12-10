@@ -2,7 +2,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class KetinggianAir extends StatelessWidget {
-  const KetinggianAir({super.key});
+  final List<Map<String, dynamic>> data; // Data dari API
+
+  const KetinggianAir({required this.data, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,14 +12,13 @@ class KetinggianAir extends StatelessWidget {
       padding: EdgeInsets.all(14),
       child: Column(
         children: [
-          SizedBox(
-            height: 10,
-          ),
+          SizedBox(height: 10),
+          // Header
           Container(
             width: double.infinity,
             padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Colors.blue, // ganti dengan kprimarySecond jika ada
+              color: Colors.blue, // Warna header
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(5),
                 topRight: Radius.circular(5),
@@ -32,94 +33,115 @@ class KetinggianAir extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            height: 10,
-          ),
-          AspectRatio(
-            aspectRatio: 2,
-            child: LineChart(
-              LineChartData(
-                lineBarsData: [
-                  LineChartBarData(
-                    spots: [
-                      FlSpot(0, 50),
-                      FlSpot(1, 80),
-                      FlSpot(2, 90),
-                      FlSpot(3, 100),
-                      FlSpot(4, 90),
-                      FlSpot(5, 90),
-                      FlSpot(6, 150),
-                      FlSpot(7, 80),
-                      FlSpot(8, 70),
-                    ],
-                    color: Colors.blueAccent,
-                    isCurved: false,
-                    barWidth: 1,
+          SizedBox(height: 10),
+          // Grafik
+          data.isEmpty
+              ? Center(
+                  child: Text(
+                    'Data tidak tersedia',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
-                ],
-                titlesData: FlTitlesData(
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 20,
-                      getTitlesWidget: (value, meta) {
-                        switch (value.toInt()) {
-                          case 0:
-                            return Text('24', style: TextStyle(fontSize: 13));
-                          case 1:
-                            return Text('25', style: TextStyle(fontSize: 13));
-                          case 2:
-                            return Text('26', style: TextStyle(fontSize: 13));
-                          case 3:
-                            return Text('27', style: TextStyle(fontSize: 13));
-                          case 4:
-                            return Text('28', style: TextStyle(fontSize: 13));
-                          case 5:
-                            return Text('29', style: TextStyle(fontSize: 13));
-                          case 6:
-                            return Text('30', style: TextStyle(fontSize: 13));
-                          case 7:
-                            return Text('31', style: TextStyle(fontSize: 13));
-                          case 8:
-                            return Text('01', style: TextStyle(fontSize: 13));
-                        }
-                        return Text('');
-                      },
-                    ),
-                  ),
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 30,
-                      getTitlesWidget: (value, meta) {
-                        return Text(value.toStringAsFixed(0),
-                            style: TextStyle(fontSize: 12));
-                      },
-                    ),
-                  ),
-                  rightTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      reservedSize: 10,
-                    ),
-                  ),
-                  topTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      reservedSize: 10,
+                )
+              : AspectRatio(
+                  aspectRatio: 2,
+                  child: LineChart(
+                    LineChartData(
+                      // Data untuk garis grafik
+                      lineBarsData: [
+                        LineChartBarData(
+                          spots: data.asMap().entries.map((entry) {
+                            final index = entry.key.toDouble();
+                            final waterLevel = entry.value['water_level'];
+                            if (waterLevel == null || waterLevel.isEmpty) {
+                              // Tangani jika 'water_level' null atau kosong
+                              return FlSpot(index,
+                                  0.0); // Bisa menggunakan nilai default, misal 0.0
+                            } else {
+                              final waterLevelDouble =
+                                  double.tryParse(waterLevel) ??
+                                      0.0; // Parsing aman
+                              return FlSpot(index, waterLevelDouble);
+                            }
+                          }).toList(),
+                          color: const Color.fromARGB(255, 52, 136, 255),
+                          isCurved: false,
+                          barWidth: 2,
+                        ),
+                      ],
+                      titlesData: FlTitlesData(
+                        // Label untuk sumbu X (tanggal)
+                        bottomTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 20,
+                            interval: 2,
+                            getTitlesWidget: (value, meta) {
+                              if (value.toInt() >= 0 &&
+                                  value.toInt() < data.length) {
+                                final date = data[value.toInt()]
+                                    ['date']; // Ambil tanggal yang sudah diolah
+
+                                if (date != null && date.isNotEmpty) {
+                                  try {
+                                    // Mengubah tanggal dari format 'YYYY-MM-DD' menjadi DateTime
+                                    final parsedDate = DateTime.parse(date);
+                                    return Text(
+                                      '${parsedDate.day}', // Menampilkan hanya hari (misalnya "29")
+                                      style: TextStyle(fontSize: 10),
+                                    );
+                                  } catch (e) {
+                                    // Jika parsing gagal, tampilkan 'Invalid'
+                                    return Text(
+                                      'Invalid',
+                                      style: TextStyle(fontSize: 10),
+                                    );
+                                  }
+                                } else {
+                                  return Text(
+                                    'No Date', // Tampilkan 'No Date' jika tidak ada tanggal
+                                    style: TextStyle(fontSize: 10),
+                                  );
+                                }
+                              }
+                              return Text('');
+                            },
+                          ),
+                        ),
+                        // Label untuk sumbu Y (nilai curah hujan)
+                        leftTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 30,
+                            getTitlesWidget: (value, meta) {
+                              return Text(
+                                value.toStringAsFixed(0),
+                                style: TextStyle(fontSize: 12),
+                              );
+                            },
+                          ),
+                        ),
+                        // Sumbu kanan dan atas tidak digunakan
+                        rightTitles: AxisTitles(
+                          sideTitles: SideTitles(reservedSize: 10),
+                        ),
+                        topTitles: AxisTitles(
+                          sideTitles: SideTitles(reservedSize: 10),
+                        ),
+                      ),
+                      // Grid dan batas grafik
+                      gridData: FlGridData(show: true),
+                      borderData: FlBorderData(
+                        show: true,
+                        border: Border.all(color: Colors.black, width: 1),
+                      ),
+                      minX: 0,
+                      maxX: (data.length - 1).toDouble(),
+                      minY: 0,
+                      maxY:
+                          200, // Sesuaikan dengan rentang curah hujan maksimal
                     ),
                   ),
                 ),
-                gridData: FlGridData(show: true),
-                borderData: FlBorderData(
-                  show: true,
-                  border: Border.all(color: Colors.black, width: 1),
-                ),
-                minX: 0,
-                maxX: 8,
-                minY: 50,
-                maxY: 200,
-              ),
-            ),
-          ),
         ],
       ),
     );
