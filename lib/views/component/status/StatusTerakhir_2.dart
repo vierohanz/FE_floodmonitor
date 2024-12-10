@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 
 class StatusTerakhir2Tab extends StatelessWidget {
-  const StatusTerakhir2Tab({super.key});
+  final Map<String, dynamic> data; // Data yang diterima dari StatusParent
+
+  const StatusTerakhir2Tab({required this.data, super.key});
 
   @override
   Widget build(BuildContext context) {
     final hp = MediaQuery.of(context).size.height;
     final wp = MediaQuery.of(context).size.width;
+
+    // Menentukan format tanggal dari data yang diterima
+    final createdAt = DateTime.parse(data['created_at']);
+    final formattedDate =
+        '${createdAt.day}-${createdAt.month}-${createdAt.year} ${createdAt.hour}:${createdAt.minute}';
+
     return Container(
       margin: EdgeInsets.only(bottom: 10, top: 14), // Jarak antar ListTile
       child: ListTile(
@@ -22,7 +30,7 @@ class StatusTerakhir2Tab extends StatelessWidget {
             ),
           ),
           child: Text(
-            'Titik Pantau Klego (02-Okt-2024 14:00)',
+            'Titik Pantau ${data['device_name']} ($formattedDate)',
             style: TextStyle(
               fontSize: hp * 0.014,
               fontWeight: FontWeight.bold,
@@ -56,11 +64,11 @@ class StatusTerakhir2Tab extends StatelessWidget {
                           style: TextStyle(
                             fontSize: hp * 0.015,
                             color: Colors.black,
-                            // Beri cetak tebal pada label
                           ),
                         ),
                         Text(
-                          'Siaga',
+                          data['status'] ??
+                              'N/A', // Menampilkan status dari data
                           style: TextStyle(
                             color: const Color.fromARGB(255, 255, 103, 14),
                             fontWeight: FontWeight.bold,
@@ -69,7 +77,7 @@ class StatusTerakhir2Tab extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 5), // Memberi jarak antara baris
+                    SizedBox(height: 5),
                     Row(
                       mainAxisAlignment: MainAxisAlignment
                           .spaceBetween, // Pisahkan label dan nilai
@@ -82,7 +90,7 @@ class StatusTerakhir2Tab extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '120 cm',
+                          '${data['water_level']} cm',
                           style: TextStyle(
                             color: const Color.fromARGB(255, 202, 27, 27),
                             fontWeight: FontWeight.bold,
@@ -104,7 +112,7 @@ class StatusTerakhir2Tab extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '5 mm',
+                          '${data['rainfall']} mm',
                           style: TextStyle(
                             color: const Color.fromARGB(255, 46, 185, 0),
                             fontWeight: FontWeight.bold,
@@ -126,7 +134,7 @@ class StatusTerakhir2Tab extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '7 km/h',
+                          '${data['wind_speed']} km/h',
                           style: TextStyle(
                             color: const Color.fromARGB(255, 46, 185, 0),
                             fontWeight: FontWeight.bold,
