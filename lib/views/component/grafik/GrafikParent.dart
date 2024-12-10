@@ -145,7 +145,7 @@ class _GrafikTabState extends State<GrafikTab> {
           ),
           // FutureBuilder untuk grafik
           FutureBuilder<List<Map<String, dynamic>>>(
-            future: ApiService.fetchData(),
+            future: ApiService.fetchDataSensor(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
