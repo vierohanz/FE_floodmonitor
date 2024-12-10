@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class StatusTerakhirTab extends StatelessWidget {
-  const StatusTerakhirTab({super.key});
+class StatusTerakhir2Tab extends StatelessWidget {
+  const StatusTerakhir2Tab({super.key});
 
   @override
   Widget build(BuildContext context) {

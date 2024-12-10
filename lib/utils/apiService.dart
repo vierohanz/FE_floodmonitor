@@ -2,11 +2,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String baseUrl =
-      'https://api.cerdaspantaubanjir.my.id/sensors-activities';
+  static const String baseUrl = 'https://api.cerdaspantaubanjir.my.id';
 
-  static Future<List<Map<String, dynamic>>> fetchData() async {
-    final response = await http.get(Uri.parse(baseUrl));
+  static Future<List<Map<String, dynamic>>> fetchDataSensor() async {
+    final response = await http.get(Uri.parse(baseUrl + '/sensors-activities'));
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);
       return data.map((e) => e as Map<String, dynamic>).toList();
