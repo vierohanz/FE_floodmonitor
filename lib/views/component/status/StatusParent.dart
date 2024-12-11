@@ -35,8 +35,7 @@ class _StatusParentState extends State<StatusParent> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       selectedRegencyId = prefs.getInt('selectedRegencyId') ?? 0;
-      selectedRegencyName =
-          prefs.getString('selectedRegencyName') ?? 'Pekalongan';
+      selectedRegencyName = prefs.getString('selectedRegencyName') ?? 'Unknown';
       selectedRegencyLatitude =
           prefs.getDouble('selectedRegencyLatitude') ?? 0.0;
       selectedRegencyLongitude =
