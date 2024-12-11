@@ -93,19 +93,24 @@ class appBar extends StatelessWidget {
                     }
 
                     return Container(
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                      ),
-                      child: CustomDropdown(
-                        closedHeaderPadding: EdgeInsets.all(0),
-                        hintText: "Pilih Kota",
-                        items: appBarC.regencies.map((regency) {
-                          return regency.name;
-                        }).toList(),
-                        onChanged: (String? value) {
-                          appBarC.updateSelectedValue(value!);
-                        },
-                        decoration: CustomDropdownDecoration(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                        ),
+                        child: CustomDropdown(
+                          closedHeaderPadding: EdgeInsets.all(0),
+                          // hintText: "Pilih Kota",
+                          items: appBarC.regencies.map((regency) {
+                            return regency.name;
+                          }).toList(),
+                          onChanged: (String? value) {
+                            if (value != null) {
+                              appBarC.updateSelectedValue(value);
+                            } else {
+                              appBarC.saveSelectedValue(
+                                  0, "unknown", "0.0", "0.0");
+                            }
+                          },
+                          decoration: CustomDropdownDecoration(
                             expandedFillColor: Colors.white,
                             closedFillColor: Colors.transparent,
                             headerStyle: TextStyle(
@@ -133,9 +138,9 @@ class appBar extends StatelessWidget {
                             expandedSuffixIcon: Icon(
                               Icons.arrow_drop_up,
                               color: Colors.black,
-                            )),
-                      ),
-                    );
+                            ),
+                          ),
+                        ));
                   }),
                   Container(
                     child: Text(

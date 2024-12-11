@@ -56,16 +56,21 @@ class appBarController extends GetxController {
   }
 
   // Update selected value (id) and fetch regency details
-  void updateSelectedValue(String value) {
-    selectedValue.value = value;
+  void updateSelectedValue(String? value) {
+    if (value == null || value.isEmpty) {
+      // Set default value
+      selectedValue.value = null;
+      saveSelectedValue(0, "unknown", "0.0", "0.0");
+      print("Default values set: ID = 0, Name = unknown");
+      return;
+    }
+
+    // Update selected regency if a valid value is provided
     final selectedRegency =
         regencies.firstWhere((regency) => regency.name == value);
-
-    // Save all relevant details (id, name, latitude, longitude) to SharedPreferences
+    selectedValue.value = value;
     saveSelectedValue(selectedRegency.id, selectedRegency.name,
         selectedRegency.latitude, selectedRegency.longitude);
-
-    // Fetch the full regency details and print them
     fetchRegencyDetails(selectedRegency.id).then((regency) {
       if (regency != null) {
         print("Selected Regency Details:");
@@ -77,42 +82,58 @@ class appBarController extends GetxController {
     });
   }
 
-  // Save selected value (ID, Name, Latitude, Longitude) to SharedPreferences
+// Save selected value (ID, Name, Latitude, Longitude) to SharedPreferences
   Future<void> saveSelectedValue(
       int id, String name, String latitudeStr, String longitudeStr) async {
     final prefs = await SharedPreferences.getInstance();
 
-    // Convert latitude and longitude from String to double
     double latitude = double.tryParse(latitudeStr) ?? 0.0;
     double longitude = double.tryParse(longitudeStr) ?? 0.0;
-
-    // Store the values into SharedPreferences
     await prefs.setInt('selectedRegencyId', id);
     await prefs.setString('selectedRegencyName', name);
     await prefs.setDouble('selectedRegencyLatitude', latitude);
     await prefs.setDouble('selectedRegencyLongitude', longitude);
 
-    // Log confirmation message
     print(
         "Saved to SharedPreferences: id = $id, name = $name, latitude = $latitude, longitude = $longitude");
   }
 
-  // Load the selected value from SharedPreferences
+// Load the selected value from SharedPreferences
   Future<void> loadSelectedValue() async {
     final prefs = await SharedPreferences.getInstance();
-    final savedId = prefs.getInt('selectedRegencyId');
+    if (!prefs.containsKey('selectedRegencyId')) {
+      await prefs.setInt('selectedRegencyId', 0);
+    }
+    if (!prefs.containsKey('selectedRegencyName')) {
+      await prefs.setString('selectedRegencyName', "unknown");
+    }
+    if (!prefs.containsKey('selectedRegencyLatitude')) {
+      await prefs.setDouble('selectedRegencyLatitude', 0.0);
+    }
+    if (!prefs.containsKey('selectedRegencyLongitude')) {
+      await prefs.setDouble('selectedRegencyLongitude', 0.0);
+    }
 
-    if (savedId != null) {
-      final regency = await fetchRegencyDetails(savedId);
-      if (regency != null) {
-        print("Loaded from SharedPreferences: ");
-        print("ID = ${regency.id}");
-        print("Name = ${regency.name}");
-        print("Latitude = ${regency.latitude}");
-        print("Longitude = ${regency.longitude}");
-      }
+    final savedId = prefs.getInt('selectedRegencyId') ?? 0;
+    final savedName = prefs.getString('selectedRegencyName') ?? "unknown";
+
+    if (savedId == 0 || savedName == "unknown") {
+      print("No regency selected. Defaulting to ID = 0, Name = unknown.");
+      selectedValue.value = null;
+      return;
+    }
+
+    final regency = await fetchRegencyDetails(savedId);
+    if (regency != null) {
+      print("Loaded from SharedPreferences:");
+      print("ID = null");
+      print("Name = Unknown");
+      print("Latitude = null");
+      print("Longitude = null");
+      selectedValue.value = regency.name;
     } else {
-      print("No regency ID found in SharedPreferences");
+      print("No details found for regency with ID \$savedId.");
+      selectedValue.value = null;
     }
   }
 
