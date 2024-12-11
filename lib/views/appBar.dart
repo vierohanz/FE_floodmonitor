@@ -13,7 +13,6 @@ class appBar extends StatelessWidget {
     final wp = MediaQuery.of(context).size.width;
 
     // Trigger fetching regencies when the view is created
-    appBarC.fetchRegencies();
 
     return Container(
       height: hp * 0.18,
