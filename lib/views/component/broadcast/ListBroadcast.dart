@@ -1,61 +1,100 @@
 import 'package:flutter/material.dart';
+import 'package:flood_monitor/utils/apiService.dart';
 
-class Listbroadcast extends StatelessWidget {
-  Listbroadcast({super.key});
+class Listbroadcast extends StatefulWidget {
+  final int selectedDeviceId; // Tambahkan properti ini
+  const Listbroadcast({Key? key, required this.selectedDeviceId})
+      : super(key: key);
 
-  // Data contoh kontak
-  final List<Map<String, String>> kontakList = [
-    {"nama": "Suko Tyas P", "nomor": "031931939193"},
-    {"nama": "ST Pernanda", "nomor": "031931939193"},
-    {"nama": "S. Tyas P.", "nomor": "031931939193"},
-    {"nama": "Suko Tyas Pernanda", "nomor": "031931939193"},
-    {"nama": "S. Tyas P.", "nomor": "031931939193"},
-    {"nama": "Suko Tyas Pernanda", "nomor": "031931939193"},
-    {"nama": "S. Tyas P.", "nomor": "031931939193"},
-    {"nama": "Suko Tyas Pernanda", "nomor": "031931939193"},
-    {"nama": "S. Tyas P.", "nomor": "031931939193"},
-    {"nama": "Suko Tyas Pernanda", "nomor": "031931939193"},
-  ];
+  @override
+  _ListbroadcastState createState() => _ListbroadcastState();
+}
+
+class _ListbroadcastState extends State<Listbroadcast> {
+  late Future<List<Map<String, dynamic>>> _broadcastData;
+
+  @override
+  void initState() {
+    super.initState();
+    _broadcastData = ApiService.fetchDataBroadcast();
+  }
+
+  String _getLocationName(int deviceId) {
+    switch (deviceId) {
+      case 1:
+        return "Klego";
+      case 2:
+        return "Yosorejo";
+      case 3:
+        return "Kedungwuluh";
+      case 4:
+        return "Kertabesuki";
+      default:
+        return "Unknown Location";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: Colors.white,
-        padding: EdgeInsets.all(8.0),
-        child: ListView.builder(
-          itemCount: kontakList.length,
-          itemBuilder: (context, index) {
-            final kontak = kontakList[index];
-            return Card(
-              color: const Color.fromARGB(255, 240, 240, 240),
-              margin: EdgeInsets.symmetric(vertical: 5.0),
-              child: ListTile(
-                title: Text(kontak['nama']!),
-                subtitle: Text('${kontak['nomor']}'),
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: _broadcastData,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+          // Filter data berdasarkan device_id
+          final filteredData = widget.selectedDeviceId == 0
+              ? snapshot.data!
+              : snapshot.data!
+                  .where((broadcast) =>
+                      broadcast['device_id'] == widget.selectedDeviceId)
+                  .toList();
+
+          if (filteredData.isEmpty) {
+            return const Center(child: Text('No data available'));
+          }
+
+          return ListView.separated(
+            itemCount: filteredData.length,
+            separatorBuilder: (context, index) => const Divider(),
+            itemBuilder: (context, index) {
+              final broadcast = filteredData[index];
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.blue,
+                  child: Text(
+                    broadcast['name']?[0]?.toUpperCase() ?? '-',
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+                title: Text(broadcast['name'] ?? 'Unknown'),
+                subtitle: Text(
+                    'Phone: ${broadcast['phone_number'] ?? "-"}\nNotes: ${broadcast['notes'] ?? "No notes"}'),
                 trailing: IconButton(
-                  icon: Icon(Icons.delete, color: Colors.red),
+                  icon: const Icon(Icons.delete, color: Colors.red),
                   onPressed: () {
-                    // Logika hapus (bisa ditambahkan sesuai kebutuhan)
-                    // Misalnya: tampilkan dialog konfirmasi
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('Hapus Kontak'),
-                          content: Text(
-                              'Apakah Anda yakin ingin menghapus kontak ini?'),
+                          title: const Text('Hapus Broadcast'),
+                          content: const Text(
+                              'Apakah Anda yakin ingin menghapus item ini?'),
                           actions: <Widget>[
                             TextButton(
-                              child: Text('Batal'),
+                              child: const Text('Batal'),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
                             ),
                             TextButton(
-                              child: Text('Hapus'),
+                              child: const Text('Hapus'),
                               onPressed: () {
-                                // Implementasi penghapusan data dari list
+                                setState(() {
+                                  filteredData.removeAt(index);
+                                });
                                 Navigator.of(context).pop();
                               },
                             ),
@@ -65,11 +104,21 @@ class Listbroadcast extends StatelessWidget {
                     );
                   },
                 ),
-              ),
-            );
-          },
-        ),
-      ),
+                onTap: () {
+                  final location = _getLocationName(broadcast['device_id']);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Location: $location'),
+                    ),
+                  );
+                },
+              );
+            },
+          );
+        } else {
+          return const Center(child: Text('No data available'));
+        }
+      },
     );
   }
 }
