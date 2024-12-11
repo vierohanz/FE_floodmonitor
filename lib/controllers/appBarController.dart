@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class appBarController extends GetxController with GetTickerProviderStateMixin {
+class appBarController extends GetxController {
   late AnimationController animationController;
   late Animation<double> rotationAnimation;
   var isRotated = false.obs;
@@ -20,12 +20,6 @@ class appBarController extends GetxController with GetTickerProviderStateMixin {
     fetchRegencies().then((_) {
       loadSelectedValue();
     });
-    animationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-    rotationAnimation =
-        Tween<double>(begin: 0, end: 1).animate(animationController);
   }
 
   // Fetch regencies from API
@@ -139,20 +133,5 @@ class appBarController extends GetxController with GetTickerProviderStateMixin {
   String getFormattedDate() {
     final now = DateTime.now();
     return "${now.day}-${now.month}-${now.year}";
-  }
-
-  void toggleRotation() {
-    if (isRotated.value) {
-      animationController.reverse();
-    } else {
-      animationController.forward();
-    }
-    isRotated.value = !isRotated.value;
-  }
-
-  @override
-  void onClose() {
-    animationController.dispose();
-    super.onClose();
   }
 }

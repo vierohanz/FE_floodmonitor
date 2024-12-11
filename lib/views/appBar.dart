@@ -1,4 +1,4 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flood_monitor/controllers/appBarController.dart';
 import 'package:flood_monitor/utils/color.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +86,6 @@ class appBar extends StatelessWidget {
                     if (appBarC.isLoading.value) {
                       return const Center(child: CircularProgressIndicator());
                     }
-
                     if (appBarC.regencies.isEmpty) {
                       return const Text(
                         "No regencies available",
@@ -94,97 +93,45 @@ class appBar extends StatelessWidget {
                       );
                     }
 
-                    return DropdownButtonHideUnderline(
-                      child: DropdownButton2<String>(
-                        isExpanded: true,
-                        hint: const Row(
-                          children: [
-                            Icon(
-                              Icons.list,
-                              size: 16,
-                              color: Colors.white,
-                            ),
-                            SizedBox(
-                              width: 4,
-                            ),
-                            Expanded(
-                              child: Text(
-                                'Select Regency',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                      ),
+                      child: CustomDropdown(
+                        closedHeaderPadding: EdgeInsets.all(0),
+                        hintText: "Pilih Kota",
                         items: appBarC.regencies.map((regency) {
-                          return DropdownMenuItem<String>(
-                            value: regency.name,
-                            child: Text(
-                              regency.name,
-                              style: TextStyle(
-                                fontFamily: "NunitoSans",
-                                fontWeight: FontWeight.w800,
-                                fontSize: wp * 0.05,
-                                color: Colors.white,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          );
+                          return regency.name;
                         }).toList(),
-                        value: appBarC.selectedValue.value != null
-                            ? appBarC.selectedValue.value
-                            : null,
                         onChanged: (String? value) {
                           appBarC.updateSelectedValue(value!);
-                          appBarC.toggleRotation();
                         },
-                        buttonStyleData: ButtonStyleData(
-                          height: 50,
-                          width: 160,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(14),
-                            color: Colors.blue.withOpacity(0.0),
-                          ),
-                          elevation: 10,
-                        ),
-                        iconStyleData: const IconStyleData(
-                          icon: Icon(
-                            Icons.arrow_forward_ios_outlined,
-                          ),
-                          iconSize: 14,
-                          iconEnabledColor: Colors.white,
-                          iconDisabledColor: Colors.grey,
-                        ),
-                        dropdownStyleData: DropdownStyleData(
-                          maxHeight: 200,
-                          width: 200,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(14),
-                            color: const Color.fromARGB(255, 243, 243, 243)
-                                .withOpacity(0.8),
-                          ),
-                          elevation: 10,
-                          offset: const Offset(-20, 0),
-                          scrollbarTheme: ScrollbarThemeData(
-                            radius: const Radius.circular(40),
-                            thickness: MaterialStateProperty.all<double>(6),
-                            thumbVisibility:
-                                MaterialStateProperty.all<bool>(true),
-                          ),
-                        ),
-                        menuItemStyleData: const MenuItemStyleData(
-                          height: 40,
-                          padding: EdgeInsets.only(left: 14, right: 14),
-                        ),
+                        decoration: CustomDropdownDecoration(
+                            closedFillColor: Colors.transparent,
+                            headerStyle: TextStyle(
+                              fontFamily: "NunitoSans",
+                              fontWeight: FontWeight.w800,
+                              fontSize: wp * 0.05,
+                              color: Colors.white,
+                            ),
+                            hintStyle: TextStyle(
+                              fontFamily: "NunitoSans",
+                              fontWeight: FontWeight.w600,
+                              fontSize: wp * 0.04,
+                              color: Colors.white,
+                            ),
+                            closedSuffixIcon: Icon(
+                              Icons.arrow_drop_down, // Dropdown arrow icon
+                              color: Colors.white, // Set the color of the icon
+                            ),
+                            expandedSuffixIcon: Icon(
+                              Icons.arrow_drop_up,
+                              color: Colors.black,
+                            )),
                       ),
                     );
                   }),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 0.0),
+                  Container(
                     child: Text(
                       appBarC.getFormattedDate(),
                       style: TextStyle(
