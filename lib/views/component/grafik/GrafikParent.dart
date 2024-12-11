@@ -3,6 +3,7 @@ import 'package:flood_monitor/views/component/grafik/KecepatanAngin.dart';
 import 'package:flutter/material.dart';
 import 'package:flood_monitor/views/component/grafik/CurahHujan.dart';
 import 'package:flood_monitor/views/component/grafik/KetinggianAir.dart';
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 
 class GrafikTab extends StatefulWidget {
   @override
@@ -79,8 +80,24 @@ class _GrafikTabState extends State<GrafikTab> {
   ];
 
   final List<String> _monitoringPoints = ["Klego", "Yosorejo"];
-  String _selectedPoint = "Klego";
-  String _selectedMonth = "Januari";
+  final TextEditingController _selectedPointController =
+      TextEditingController();
+  final TextEditingController _selectedMonthController =
+      TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedPointController.text = _monitoringPoints[0]; // Default: Klego
+    _selectedMonthController.text = _months[0]; // Default: Januari
+  }
+
+  @override
+  void dispose() {
+    _selectedPointController.dispose();
+    _selectedMonthController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,46 +116,42 @@ class _GrafikTabState extends State<GrafikTab> {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(width: 10),
-                DropdownButton<String>(
-                  value: _selectedMonth,
-                  items: _months.map((String month) {
-                    return DropdownMenuItem<String>(
-                      value: month,
-                      child: Text(month),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedMonth = newValue!;
-                    });
-                  },
+                Container(
+                  child: Expanded(
+                    child: CustomDropdown<String>.search(
+                      hintText: "Pilih Bulan",
+                      items: _months,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedMonthController.text = newValue!;
+                        });
+                      },
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
           // Dropdown untuk memilih titik pantau
           Container(
-            padding: EdgeInsets.only(left: 16, top: 16),
+            padding: EdgeInsets.only(left: 16),
             child: Row(
               children: [
                 Text(
                   "Titik Pantau: ",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(width: 10),
-                DropdownButton<String>(
-                  value: _selectedPoint,
-                  items: _monitoringPoints.map((String point) {
-                    return DropdownMenuItem<String>(
-                      value: point,
-                      child: Text(point),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedPoint = newValue!;
-                    });
-                  },
+                SizedBox(width: 2),
+                Expanded(
+                  child: CustomDropdown<String>.search(
+                    hintText: "Pilih Titik Pantau",
+                    items: _monitoringPoints,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedPointController.text = newValue!;
+                      });
+                    },
+                  ),
                 ),
               ],
             ),
@@ -165,8 +178,10 @@ class _GrafikTabState extends State<GrafikTab> {
                     return false; // Jika ada nilai null, data ini akan diabaikan
                   }
 
-                  final pointMatch = deviceName.contains(_selectedPoint);
-                  final monthIndex = _months.indexOf(_selectedMonth) + 1;
+                  final pointMatch =
+                      deviceName.contains(_selectedPointController.text);
+                  final monthIndex =
+                      _months.indexOf(_selectedMonthController.text) + 1;
                   final createdAtDate = DateTime.parse(createdAt);
                   final monthMatch = createdAtDate.month == monthIndex;
 

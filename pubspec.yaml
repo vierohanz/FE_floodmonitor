@@ -21,6 +21,7 @@ dependencies:
   custom_info_window: ^1.0.1
   http: ^1.2.2
   dropdown_button2: ^2.3.9
+  animated_custom_dropdown: 3.1.1
 
 dev_dependencies:
   flutter_test:
