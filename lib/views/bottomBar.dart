@@ -29,7 +29,6 @@ class bottomBar extends StatelessWidget {
             children: [
               homePage(),
               messagePage(),
-              profilePage(),
             ],
             onPageChanged: (index) {
               bottomBarC.changePage(index);
@@ -49,7 +48,7 @@ class bottomBar extends StatelessWidget {
                 ),
               ],
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 70),
             child: BottomBar(
               selectedIndex: bottomBarC.model.currentPage.value,
               onTap: (int index) {
@@ -65,11 +64,6 @@ class bottomBar extends StatelessWidget {
                   icon: FaIcon(FontAwesomeIcons.facebookMessenger),
                   title: Text('Message'),
                   activeColor: Colors.red,
-                ),
-                BottomBarItem(
-                  icon: Icon(Icons.person),
-                  title: Text('Account'),
-                  activeColor: Colors.greenAccent.shade700,
                 ),
               ],
             ),
