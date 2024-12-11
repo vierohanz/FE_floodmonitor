@@ -107,6 +107,7 @@ class appBar extends StatelessWidget {
                           appBarC.updateSelectedValue(value!);
                         },
                         decoration: CustomDropdownDecoration(
+                            expandedFillColor: Colors.white,
                             closedFillColor: Colors.transparent,
                             headerStyle: TextStyle(
                               fontFamily: "NunitoSans",
@@ -114,15 +115,21 @@ class appBar extends StatelessWidget {
                               fontSize: wp * 0.05,
                               color: Colors.white,
                             ),
+                            listItemStyle: TextStyle(
+                              fontFamily: "NunitoSans",
+                              fontWeight: FontWeight.w600,
+                              fontSize: wp * 0.04,
+                              color: Colors.black,
+                            ),
                             hintStyle: TextStyle(
                               fontFamily: "NunitoSans",
                               fontWeight: FontWeight.w600,
                               fontSize: wp * 0.04,
-                              color: Colors.white,
+                              color: Color.fromARGB(255, 186, 186, 186),
                             ),
                             closedSuffixIcon: Icon(
-                              Icons.arrow_drop_down, // Dropdown arrow icon
-                              color: Colors.white, // Set the color of the icon
+                              Icons.arrow_drop_down,
+                              color: Colors.white,
                             ),
                             expandedSuffixIcon: Icon(
                               Icons.arrow_drop_up,
