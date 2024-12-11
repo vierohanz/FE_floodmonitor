@@ -12,22 +12,35 @@ class StatusParent extends StatefulWidget {
 }
 
 class _StatusParentState extends State<StatusParent> {
-  late Future<List<Map<String, dynamic>>> _data;
-  String? selectedCity;
+  late int selectedRegencyId;
+  late double selectedRegencyLatitude;
+  late double selectedRegencyLongitude;
+  late String selectedRegencyName;
+  late Future<List<Map<String, dynamic>>> _data; // Data yang diterima dari API
+  final Map<String, List<int>> deviceIdsByCity = {
+    'Pekalongan': [1, 2], // Device_id untuk Pekalongan
+    'Brebes': [3, 4], // Device_id untuk Brebes
+  };
 
   @override
   void initState() {
     super.initState();
-    _loadCityFromPreferences();
-    _data = ApiService.fetchDataSensor();
+    _data =
+        ApiService.fetchDataSensor(); // Memanggil API untuk mendapatkan data
+    _loadSelectedRegency();
   }
 
-  // Fungsi untuk memuat kota dari SharedPreferences
-  Future<void> _loadCityFromPreferences() async {
+  // Memuat data dari SharedPreferences
+  _loadSelectedRegency() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      selectedCity = prefs.getString('regency.name') ??
-          'Pekalongan'; // Ambil nama kota dari session
+      selectedRegencyId = prefs.getInt('selectedRegencyId') ?? 0;
+      selectedRegencyName =
+          prefs.getString('selectedRegencyName') ?? 'Pekalongan';
+      selectedRegencyLatitude =
+          prefs.getDouble('selectedRegencyLatitude') ?? 0.0;
+      selectedRegencyLongitude =
+          prefs.getDouble('selectedRegencyLongitude') ?? 0.0;
     });
   }
 
@@ -47,32 +60,47 @@ class _StatusParentState extends State<StatusParent> {
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (snapshot.hasData) {
-                  // Filter data berdasarkan kota yang dipilih
-                  final filteredData = snapshot.data!
-                      .where((data) =>
-                          data['regency_name']
-                              ?.contains(selectedCity ?? 'Pekalongan') ==
-                          true)
-                      .toList();
+                  if (selectedRegencyName.isNotEmpty) {
+                    // Gunakan selectedRegencyName
+                    // Filter data berdasarkan device_id sesuai kota yang dipilih
+                    final cityDeviceIds =
+                        deviceIdsByCity[selectedRegencyName] ?? [];
+                    final filteredData = snapshot.data!
+                        .where(
+                            (data) => cityDeviceIds.contains(data['device_id']))
+                        .toList();
 
-                  if (filteredData.isNotEmpty) {
-                    // Ambil data untuk device_id sesuai kota
-                    final statusTerakhir1Data = filteredData
-                        .where((data) =>
-                            data['regency_name'].contains(selectedCity!))
-                        .last;
+                    if (filteredData.isNotEmpty) {
+                      // Ambil data untuk device_id 1 atau 3 untuk StatusTerakhir1Tab
+                      final statusTerakhir1Data = filteredData
+                          .where((data) =>
+                              data['device_id'] == 1 || data['device_id'] == 3)
+                          .last;
 
-                    return SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          StatusTerakhir1Tab(data: statusTerakhir1Data),
-                          // Tambahkan komponen lainnya jika perlu
-                        ],
-                      ),
-                    );
+                      // Ambil data untuk device_id 2 atau 4 untuk StatusTerakhir2Tab
+                      final statusTerakhir2Data = filteredData
+                          .where((data) =>
+                              data['device_id'] == 2 || data['device_id'] == 4)
+                          .last;
+
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            StatusTerakhir1Tab(
+                                data:
+                                    statusTerakhir1Data), // Mengirim data untuk device_id 1 atau 3
+                            StatusTerakhir2Tab(
+                                data:
+                                    statusTerakhir2Data), // Mengirim data untuk device_id 2 atau 4
+                          ],
+                        ),
+                      );
+                    } else {
+                      return Center(
+                          child: Text('No data available for this city'));
+                    }
                   } else {
-                    return Center(
-                        child: Text('No data available for $selectedCity'));
+                    return Center(child: Text('Please select a city'));
                   }
                 } else {
                   return Center(child: Text('No data available'));

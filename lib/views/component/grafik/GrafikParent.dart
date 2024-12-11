@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flood_monitor/views/component/grafik/CurahHujan.dart';
 import 'package:flood_monitor/views/component/grafik/KetinggianAir.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GrafikTab extends StatefulWidget {
   @override
@@ -64,6 +65,10 @@ List<Map<String, dynamic>> getMaxValuesPerDay(List<Map<String, dynamic>> data) {
 }
 
 class _GrafikTabState extends State<GrafikTab> {
+  late int selectedRegencyId;
+  late double selectedRegencyLatitude;
+  late double selectedRegencyLongitude;
+  late String selectedRegencyName;
   final List<String> _months = [
     "Januari",
     "Februari",
@@ -79,7 +84,24 @@ class _GrafikTabState extends State<GrafikTab> {
     "Desember",
   ];
 
-  final List<String> _monitoringPoints = ["Klego", "Yosorejo"];
+  // Memuat data dari SharedPreferences
+  _loadSelectedRegency() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      selectedRegencyId = prefs.getInt('selectedRegencyId') ?? 0;
+      selectedRegencyName =
+          prefs.getString('selectedRegencyName') ?? 'Pekalongan';
+      selectedRegencyLatitude =
+          prefs.getDouble('selectedRegencyLatitude') ?? 0.0;
+      selectedRegencyLongitude =
+          prefs.getDouble('selectedRegencyLongitude') ?? 0.0;
+    });
+  }
+
+  final List<String> _monitoringPoints1 = ["Klego", "Yosorejo"];
+  final List<String> _monitoringPoints2 = ["Kedungwuluh", "Kertabesuki"];
+  List<String> _monitoringPoints =
+      []; // Monitoring points yang akan ditampilkan
   final TextEditingController _selectedPointController =
       TextEditingController();
   final TextEditingController _selectedMonthController =
@@ -88,8 +110,9 @@ class _GrafikTabState extends State<GrafikTab> {
   @override
   void initState() {
     super.initState();
-    _selectedPointController.text = _monitoringPoints[0]; // Default: Klego
+    _selectedPointController.text = _monitoringPoints1[0]; // Default: Klego
     _selectedMonthController.text = _months[0]; // Default: Januari
+    _loadSelectedRegency();
   }
 
   @override
@@ -101,6 +124,15 @@ class _GrafikTabState extends State<GrafikTab> {
 
   @override
   Widget build(BuildContext context) {
+    // Update monitoring points berdasarkan selectedRegencyId
+    if (selectedRegencyId == 1) {
+      _monitoringPoints = _monitoringPoints1;
+    } else if (selectedRegencyId == 2) {
+      _monitoringPoints = _monitoringPoints2;
+    } else {
+      _monitoringPoints = []; // Kosongkan jika ID tidak cocok
+    }
+
     return SingleChildScrollView(
       controller: ScrollController(),
       child: Column(
