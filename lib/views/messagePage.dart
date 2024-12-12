@@ -11,14 +11,15 @@ class messagePage extends StatefulWidget {
 }
 
 class _messagePageState extends State<messagePage> {
-  late int selectedDeviceId = 0; // Default untuk semua data
-  late int selectedRegencyId;
-  late double selectedRegencyLatitude;
-  late double selectedRegencyLongitude;
-  late String selectedRegencyName;
+  // Memberikan nilai default untuk variabel late
+  int selectedDeviceId = 0; // Nilai default untuk semua data
+  int selectedRegencyId = 0; // Nilai default
+  double selectedRegencyLatitude = 0.0; // Nilai default
+  double selectedRegencyLongitude = 0.0; // Nilai default
+  String selectedRegencyName = ''; // Nilai default
   final List<String> _monitoringPoints1 = ["Klego", "Yosorejo"];
   final List<String> _monitoringPoints2 = ["Kedungwuluh", "Kertabesuki"];
-  late List<String> _monitoringPoints;
+  List<String> _monitoringPoints = [];
   final TextEditingController _selectedPointController =
       TextEditingController();
 

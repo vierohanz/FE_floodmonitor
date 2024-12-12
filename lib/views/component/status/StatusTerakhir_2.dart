@@ -14,6 +14,9 @@ class StatusTerakhir2Tab extends StatelessWidget {
     final createdAt = DateTime.parse(data['created_at']);
     final formattedDate =
         '${createdAt.day}-${createdAt.month}-${createdAt.year} ${createdAt.hour}:${createdAt.minute}';
+    String deviceName = data['device_name']; // Misalnya "DEVICE-Klego"
+    String cleanedDeviceName =
+        deviceName.replaceAll('DEVICE-', ''); // Hasilnya "Klego"
 
     return Container(
       margin: EdgeInsets.only(bottom: 10, top: 14), // Jarak antar ListTile
@@ -30,7 +33,7 @@ class StatusTerakhir2Tab extends StatelessWidget {
             ),
           ),
           child: Text(
-            'Titik Pantau ${data['device_name']} ($formattedDate)',
+            'Titik Pantau $cleanedDeviceName ($formattedDate)',
             style: TextStyle(
               fontSize: hp * 0.014,
               fontWeight: FontWeight.bold,

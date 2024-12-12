@@ -16,12 +16,11 @@ List<Map<String, dynamic>> getMaxValuesPerDay(List<Map<String, dynamic>> data) {
 
   for (var entry in data) {
     final date = DateTime.parse(entry['created_at']).toLocal();
-    final key = '${date.year}-${date.month}-${date.day}'; // Format YYYY-MM-DD
+    final key = '${date.year}-${date.month}-${date.day}';
 
-    // Pastikan nilai 'water_level', 'rainfall', dan 'wind_speed' tidak null atau kosong
     final waterLevel = entry['water_level'] != null
         ? double.tryParse(entry['water_level']) ?? 0.0
-        : 0.0; // Jika null, beri nilai default 0.0
+        : 0.0;
 
     final rainfall = entry['rainfall'] != null
         ? double.tryParse(entry['rainfall']) ?? 0.0
@@ -31,7 +30,6 @@ List<Map<String, dynamic>> getMaxValuesPerDay(List<Map<String, dynamic>> data) {
         ? double.tryParse(entry['wind_speed']) ?? 0.0
         : 0.0;
 
-    // Menyimpan nilai maksimal untuk water_level, rainfall, dan wind_speed
     if (!maxValues.containsKey(key)) {
       maxValues[key] = {
         'water_level': waterLevel,
@@ -52,12 +50,10 @@ List<Map<String, dynamic>> getMaxValuesPerDay(List<Map<String, dynamic>> data) {
     }
   }
 
-  // Konversi hasil ke dalam format yang sesuai
   return maxValues.entries.map((entry) {
     return {
       'date': entry.key,
-      'water_level':
-          entry.value['water_level']!.toStringAsFixed(2), // Format desimal 2
+      'water_level': entry.value['water_level']!.toStringAsFixed(2),
       'rainfall': entry.value['rainfall']!.toStringAsFixed(2),
       'wind_speed': entry.value['wind_speed']!.toStringAsFixed(2),
     };
@@ -65,10 +61,12 @@ List<Map<String, dynamic>> getMaxValuesPerDay(List<Map<String, dynamic>> data) {
 }
 
 class _GrafikTabState extends State<GrafikTab> {
-  late int? selectedRegencyId;
-  late double selectedRegencyLatitude;
-  late double selectedRegencyLongitude;
-  late String selectedRegencyName;
+  // Nilai default untuk variabel yang sebelumnya dideklarasikan dengan 'late'
+  int? selectedRegencyId = 0; // Nilai default 0
+  double selectedRegencyLatitude = 0.0; // Nilai default 0.0
+  double selectedRegencyLongitude = 0.0; // Nilai default 0.0
+  String selectedRegencyName = 'unknown'; // Nilai default 'unknown'
+
   final List<String> _months = [
     "Januari",
     "Februari",
@@ -99,8 +97,7 @@ class _GrafikTabState extends State<GrafikTab> {
 
   final List<String> _monitoringPoints1 = ["Klego", "Yosorejo"];
   final List<String> _monitoringPoints2 = ["Kedungwuluh", "Kertabesuki"];
-  List<String> _monitoringPoints =
-      []; // Monitoring points yang akan ditampilkan
+  List<String> _monitoringPoints = [];
   final TextEditingController _selectedPointController =
       TextEditingController();
   final TextEditingController _selectedMonthController =
@@ -123,13 +120,12 @@ class _GrafikTabState extends State<GrafikTab> {
 
   @override
   Widget build(BuildContext context) {
-    // Update monitoring points berdasarkan selectedRegencyId
     if (selectedRegencyId == 1) {
       _monitoringPoints = _monitoringPoints1;
     } else if (selectedRegencyId == 2) {
       _monitoringPoints = _monitoringPoints2;
     } else {
-      _monitoringPoints = []; // Kosongkan jika ID tidak cocok
+      _monitoringPoints = [];
     }
 
     return SingleChildScrollView(
@@ -192,13 +188,20 @@ class _GrafikTabState extends State<GrafikTab> {
             future: ApiService.fetchDataSensor(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(),
+                      SizedBox(height: 20),
+                      Text('Memuat data...'),
+                    ],
+                  ),
+                );
               } else if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else if (snapshot.hasData) {
-                // Filter data berdasarkan titik pantau dan bulan
                 final filteredData = snapshot.data!.where((item) {
-                  // Pastikan semua nilai yang diperlukan tidak null
                   final deviceName = item['device_name'];
                   final createdAt = item['created_at'];
                   final waterLevel = item['water_level'];
@@ -206,7 +209,7 @@ class _GrafikTabState extends State<GrafikTab> {
                   if (deviceName == null ||
                       createdAt == null ||
                       waterLevel == null) {
-                    return false; // Jika ada nilai null, data ini akan diabaikan
+                    return false;
                   }
 
                   final pointMatch =
@@ -219,7 +222,6 @@ class _GrafikTabState extends State<GrafikTab> {
                   return pointMatch && monthMatch;
                 }).toList();
 
-                // Ambil nilai maksimal per hari
                 final maxDataPerDay = getMaxValuesPerDay(filteredData);
                 return Column(
                   children: [
