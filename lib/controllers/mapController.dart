@@ -1,116 +1,102 @@
-import 'package:custom_info_window/custom_info_window.dart';
+import 'dart:async';
+import 'package:flood_monitor/models/mapModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../models/mapModel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class mapController extends GetxController {
-  final CustomInfoWindowController customInfoWindowController =
-      CustomInfoWindowController();
-  final Set<Marker> markers = {};
-
-  final mapM = mapModel(
-    nameLocation: ["Polines", "Pekalongan", "Brebes"],
-    pointLocation: [
-      const LatLng(-7.052196421969724, 110.4355492705154),
-      const LatLng(-6.891850, 109.669352),
-      const LatLng(-6.854984, 109.040209),
-    ],
-    imgLocation: [
-      "assets/images/polines_cover.jpeg",
-      "assets/images/pekalongan.jpg",
-      "assets/images/brebes.jpg",
-    ],
-  );
+  var selectedValue = RxnString();
+  var mapData = mapModel(nameLocation: [], pointLocation: []).obs;
+  GoogleMapController? googleMapController;
+  late ValueNotifier<Map<String, dynamic>> regencyNotifier;
+  Timer? _updateTimer;
 
   @override
   void onInit() {
     super.onInit();
-    loadMarkers();
+    _startListeningToPreferences();
+    regencyNotifier = ValueNotifier<Map<String, dynamic>>({
+      'selectedRegencyId': 0,
+      'selectedRegencyName': 'Unknown',
+      'selectedRegencyLatitude': 0.0,
+      'selectedRegencyLongitude': 0.0,
+    });
+
+    _loadSelectedRegency();
+    loadSelectedValue();
+    _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _loadSelectedRegency();
+      loadSelectedValue();
+    });
   }
 
-  void loadMarkers() {
-    for (int i = 0; i < mapM.pointLocation.length; i++) {
-      markers.add(
-        Marker(
-          markerId: MarkerId(i.toString()),
-          icon: BitmapDescriptor.defaultMarker,
-          position: mapM.pointLocation[i],
-          onTap: () {
-            if (customInfoWindowController.addInfoWindow != null) {
-              customInfoWindowController.addInfoWindow!(
-                _buildInfoWindowContent(i),
-                mapM.pointLocation[i],
-              );
-            } else {
-              print("addInfoWindow is null");
-            }
-          },
-        ),
+  @override
+  void onClose() {
+    _updateTimer?.cancel();
+    super.onClose();
+  }
+
+// Listen to preference changes
+  Future<void> _startListeningToPreferences() async {
+    _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _loadSelectedRegency();
+      loadSelectedValue();
+    });
+  }
+
+// Load selected value from shared preferences
+  Future<void> loadSelectedValue() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedId = prefs.getInt('selectedRegencyId') ?? 0;
+    final savedName = prefs.getString('selectedRegencyName') ?? "unknown";
+    final savedLatitude = prefs.getDouble('selectedRegencyLatitude') ?? 0.0;
+    final savedLongitude = prefs.getDouble('selectedRegencyLongitude') ?? 0.0;
+
+    // Skip if the name has not changed
+    if (selectedValue.value == savedName) {
+      return;
+    }
+    LatLng point = LatLng(savedLatitude, savedLongitude);
+    mapData.update((data) {
+      data?.nameLocation = [savedName];
+      data?.pointLocation = [point];
+    });
+
+    selectedValue.value = savedName;
+    if (googleMapController != null) {
+      googleMapController!.animateCamera(
+        CameraUpdate.newLatLngZoom(point, 12.0),
       );
     }
-    update();
   }
 
-  Widget _buildInfoWindowContent(int index) {
-    return Container(
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (mapM.imgLocation[index].startsWith('assets/'))
-            Image.asset(
-              mapM.imgLocation[index],
-              height: 100,
-              width: 250,
-              fit: BoxFit.cover,
-            )
-          else
-            Image.network(
-              mapM.imgLocation[index],
-              height: 100,
-              width: 250,
-              fit: BoxFit.cover,
-            ),
-          Container(
-            padding: EdgeInsets.all(4),
-            child: Text(
-              mapM.nameLocation[index],
-              style: TextStyle(
-                  decoration: TextDecoration.none,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                  color: Colors.black),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(4),
-            child: const Row(
-              children: [
-                Icon(Icons.star, color: Colors.amber, size: 6),
-                Icon(Icons.star, color: Colors.amber, size: 6),
-                Icon(Icons.star, color: Colors.amber, size: 6),
-                Icon(Icons.star, color: Colors.amber, size: 6),
-                Icon(Icons.star, color: Colors.amber, size: 6),
-                // Text("(5)"),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+  // Fetch and update regency data from shared preferences
+  _loadSelectedRegency() async {
+    final prefs = await SharedPreferences.getInstance();
+    final newRegencyData = {
+      'selectedRegencyId': prefs.getInt('selectedRegencyId') ?? 0,
+      'selectedRegencyName':
+          prefs.getString('selectedRegencyName') ?? 'Unknown',
+      'selectedRegencyLatitude':
+          prefs.getDouble('selectedRegencyLatitude') ?? 0.0,
+      'selectedRegencyLongitude':
+          prefs.getDouble('selectedRegencyLongitude') ?? 0.0,
+    };
+    if (newRegencyData['selectedRegencyId'] !=
+            regencyNotifier.value['selectedRegencyId'] ||
+        newRegencyData['selectedRegencyName'] !=
+            regencyNotifier.value['selectedRegencyName'] ||
+        newRegencyData['selectedRegencyLatitude'] !=
+            regencyNotifier.value['selectedRegencyLatitude'] ||
+        newRegencyData['selectedRegencyLongitude'] !=
+            regencyNotifier.value['selectedRegencyLongitude']) {
+      regencyNotifier.value = newRegencyData;
+    }
   }
 
-  void onMapTap() {
-    customInfoWindowController.hideInfoWindow!();
-  }
-
-  void onCameraMove(CameraPosition position) {
-    customInfoWindowController.onCameraMove!();
-  }
-
-  void onMapCreated(GoogleMapController controller) {
-    customInfoWindowController.googleMapController = controller;
-    print("Map created and controller is initialized: $controller");
+  // Set the Google Map Controller
+  void setGoogleMapController(GoogleMapController controller) {
+    googleMapController = controller;
   }
 }

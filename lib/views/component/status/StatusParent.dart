@@ -25,8 +25,7 @@ class _StatusParentState extends State<StatusParent> {
   @override
   void initState() {
     super.initState();
-    _data =
-        ApiService.fetchDataSensor(); // Memanggil API untuk mendapatkan data
+    _data = ApiService.fetchDataSensor();
     _loadSelectedRegency();
   }
 

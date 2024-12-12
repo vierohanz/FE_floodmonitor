@@ -39,8 +39,7 @@ class StatusTerakhir1Tab extends StatelessWidget {
           ),
         ),
         subtitle: Padding(
-          padding: EdgeInsets.only(
-              top: 10), // Menambahkan jarak vertikal antara title dan subtitle
+          padding: EdgeInsets.only(top: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
