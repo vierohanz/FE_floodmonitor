@@ -27,8 +27,7 @@ class _messagePageState extends State<messagePage> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       selectedRegencyId = prefs.getInt('selectedRegencyId') ?? 0;
-      selectedRegencyName =
-          prefs.getString('selectedRegencyName') ?? 'Pekalongan';
+      selectedRegencyName = prefs.getString('selectedRegencyName') ?? '';
       selectedRegencyLatitude =
           prefs.getDouble('selectedRegencyLatitude') ?? 0.0;
       selectedRegencyLongitude =

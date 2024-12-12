@@ -89,8 +89,7 @@ class _GrafikTabState extends State<GrafikTab> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       selectedRegencyId = prefs.getInt('selectedRegencyId') ?? 0;
-      selectedRegencyName =
-          prefs.getString('selectedRegencyName') ?? 'Pekalongan';
+      selectedRegencyName = prefs.getString('selectedRegencyName') ?? 'unknown';
       selectedRegencyLatitude =
           prefs.getDouble('selectedRegencyLatitude') ?? 0.0;
       selectedRegencyLongitude =
