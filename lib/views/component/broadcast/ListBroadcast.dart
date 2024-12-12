@@ -36,6 +36,17 @@ class _ListbroadcastState extends State<Listbroadcast> {
 
   @override
   Widget build(BuildContext context) {
+    // Tampilkan teks "Pilih Lokasi Device dahulu" jika selectedDeviceId == 0
+    if (widget.selectedDeviceId == 0) {
+      return const Center(
+        child: Text(
+          "Pilih titik pantau dahulu",
+          style: TextStyle(fontSize: 18, color: Colors.grey),
+        ),
+      );
+    }
+
+    // Jika selectedDeviceId != 0, tampilkan daftar data broadcast
     return FutureBuilder<List<Map<String, dynamic>>>(
       future: _broadcastData,
       builder: (context, snapshot) {
@@ -45,12 +56,10 @@ class _ListbroadcastState extends State<Listbroadcast> {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           // Filter data berdasarkan device_id
-          final filteredData = widget.selectedDeviceId == 0
-              ? snapshot.data!
-              : snapshot.data!
-                  .where((broadcast) =>
-                      broadcast['device_id'] == widget.selectedDeviceId)
-                  .toList();
+          final filteredData = snapshot.data!
+              .where((broadcast) =>
+                  broadcast['device_id'] == widget.selectedDeviceId)
+              .toList();
 
           if (filteredData.isEmpty) {
             return const Center(child: Text('No data available'));

@@ -1,10 +1,13 @@
 import 'package:flood_monitor/utils/apiService.dart';
+import 'package:flood_monitor/utils/color.dart';
 import 'package:flood_monitor/views/component/grafik/KecepatanAngin.dart';
 import 'package:flutter/material.dart';
 import 'package:flood_monitor/views/component/grafik/CurahHujan.dart';
 import 'package:flood_monitor/views/component/grafik/KetinggianAir.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 class GrafikTab extends StatefulWidget {
   @override
@@ -93,6 +96,33 @@ class _GrafikTabState extends State<GrafikTab> {
       selectedRegencyLongitude =
           prefs.getDouble('selectedRegencyLongitude') ?? 0.0;
     });
+  }
+
+  // Widget untuk efek shimmer pada grafik
+  Widget _buildShimmerPlaceholder() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey.shade100,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            width: double.infinity,
+            height: 180.0, // Placeholder untuk grafik utama
+            color: Colors.grey,
+          ),
+          SizedBox(height: 8.0),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 16.0),
+            width: double.infinity,
+            height: 180.0, // Placeholder untuk grafik kedua
+            color: Colors.grey,
+          ),
+          SizedBox(height: 8.0),
+        ],
+      ),
+    );
   }
 
   final List<String> _monitoringPoints1 = ["Klego", "Yosorejo"];
@@ -188,16 +218,7 @@ class _GrafikTabState extends State<GrafikTab> {
             future: ApiService.fetchDataSensor(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(),
-                      SizedBox(height: 20),
-                      Text('Memuat data...'),
-                    ],
-                  ),
-                );
+                return _buildShimmerPlaceholder(); // Mengganti dengan shimmer
               } else if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else if (snapshot.hasData) {

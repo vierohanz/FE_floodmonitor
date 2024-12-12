@@ -136,9 +136,9 @@ class KetinggianAir extends StatelessWidget {
                       ),
                       minX: 0,
                       maxX: (data.length - 1).toDouble(),
-                      minY: 0,
+                      minY: 50,
                       maxY:
-                          200, // Sesuaikan dengan rentang curah hujan maksimal
+                          350, // Sesuaikan dengan rentang curah hujan maksimal
                     ),
                   ),
                 ),

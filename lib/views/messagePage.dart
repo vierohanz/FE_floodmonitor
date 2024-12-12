@@ -11,15 +11,14 @@ class messagePage extends StatefulWidget {
 }
 
 class _messagePageState extends State<messagePage> {
-  // Memberikan nilai default untuk variabel late
-  int selectedDeviceId = 0; // Nilai default untuk semua data
-  int selectedRegencyId = 0; // Nilai default
-  double selectedRegencyLatitude = 0.0; // Nilai default
-  double selectedRegencyLongitude = 0.0; // Nilai default
-  String selectedRegencyName = ''; // Nilai default
+  late int selectedDeviceId = 0; // Default untuk semua data
+  late int selectedRegencyId = 0;
+  late double selectedRegencyLatitude = 0.0;
+  late double selectedRegencyLongitude = 0.0;
+  late String selectedRegencyName = "Unknown";
   final List<String> _monitoringPoints1 = ["Klego", "Yosorejo"];
   final List<String> _monitoringPoints2 = ["Kedungwuluh", "Kertabesuki"];
-  List<String> _monitoringPoints = [];
+  late List<String> _monitoringPoints;
   final TextEditingController _selectedPointController =
       TextEditingController();
 
@@ -55,6 +54,7 @@ class _messagePageState extends State<messagePage> {
     final hp = MediaQuery.of(context).size.height;
     final wp = MediaQuery.of(context).size.width;
 
+    // Atur monitoring points sesuai dengan selectedRegencyId
     if (selectedRegencyId == 1) {
       _monitoringPoints = _monitoringPoints1;
     } else if (selectedRegencyId == 2) {
@@ -122,24 +122,33 @@ class _messagePageState extends State<messagePage> {
                           ),
                           const SizedBox(width: 8),
                           Expanded(
-                            child: CustomDropdown<String>.search(
-                              hintText: "Pilih Titik Pantau",
-                              items: _monitoringPoints,
-                              onChanged: (String? newValue) {
-                                if (newValue != null) {
-                                  setState(() {
-                                    _selectedPointController.text = newValue;
-                                    // Mapping nama titik pantau ke device_id
-                                    selectedDeviceId = _monitoringPoints1
-                                            .contains(newValue)
-                                        ? _monitoringPoints1.indexOf(newValue) +
-                                            1
-                                        : _monitoringPoints2.indexOf(newValue) +
-                                            3;
-                                  });
-                                }
-                              },
-                            ),
+                            child: selectedRegencyId == 0
+                                ? const Text(
+                                    "Pilih Regency dahulu",
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.grey),
+                                  )
+                                : CustomDropdown<String>.search(
+                                    hintText: "Pilih Titik Pantau",
+                                    items: _monitoringPoints,
+                                    onChanged: (String? newValue) {
+                                      if (newValue != null) {
+                                        setState(() {
+                                          _selectedPointController.text =
+                                              newValue;
+                                          // Mapping nama titik pantau ke device_id
+                                          selectedDeviceId = _monitoringPoints1
+                                                  .contains(newValue)
+                                              ? _monitoringPoints1
+                                                      .indexOf(newValue) +
+                                                  1
+                                              : _monitoringPoints2
+                                                      .indexOf(newValue) +
+                                                  3;
+                                        });
+                                      }
+                                    },
+                                  ),
                           ),
                         ],
                       ),
@@ -165,9 +174,16 @@ class _messagePageState extends State<messagePage> {
                           ),
                         ],
                       ),
-                      child: Listbroadcast(
-                        selectedDeviceId: selectedDeviceId,
-                      ),
+                      child: selectedDeviceId == 0
+                          ? const Center(
+                              child: Text(
+                                "Pilih Lokasi Device dahulu",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            )
+                          : Listbroadcast(
+                              selectedDeviceId: selectedDeviceId,
+                            ),
                     ),
                   ],
                 ),
