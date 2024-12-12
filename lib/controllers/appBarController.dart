@@ -22,7 +22,7 @@ class appBarController extends GetxController {
     });
   }
 
-  // Fetch regencies from API
+// Fetch regencies from API
   Future<void> fetchRegencies() async {
     try {
       isLoading.value = true;
@@ -55,7 +55,7 @@ class appBarController extends GetxController {
     }
   }
 
-  // Update selected value (id) and fetch regency details
+// Update selected value (id) and fetch regency details
   void updateSelectedValue(String? value) {
     if (value == null || value.isEmpty) {
       // Set default value
@@ -64,8 +64,6 @@ class appBarController extends GetxController {
       print("Default values set: ID = 0, Name = unknown");
       return;
     }
-
-    // Update selected regency if a valid value is provided
     final selectedRegency =
         regencies.firstWhere((regency) => regency.name == value);
     selectedValue.value = value;
@@ -89,11 +87,11 @@ class appBarController extends GetxController {
 
     double latitude = double.tryParse(latitudeStr) ?? 0.0;
     double longitude = double.tryParse(longitudeStr) ?? 0.0;
+
     await prefs.setInt('selectedRegencyId', id);
     await prefs.setString('selectedRegencyName', name);
     await prefs.setDouble('selectedRegencyLatitude', latitude);
     await prefs.setDouble('selectedRegencyLongitude', longitude);
-
     print(
         "Saved to SharedPreferences: id = $id, name = $name, latitude = $latitude, longitude = $longitude");
   }
@@ -137,7 +135,7 @@ class appBarController extends GetxController {
     }
   }
 
-  // Fetch the regency details by ID
+// Fetch the regency details by ID
   Future<getAllRegencyModel?> fetchRegencyDetails(int id) async {
     try {
       final String url = "${prodUrl}/regencies/$id";
@@ -166,9 +164,9 @@ class appBarController extends GetxController {
     }
   }
 
-  // Format the current date
+// Format the current date
   String getFormattedDate() {
     final now = DateTime.now();
-    return "${now.day}-${now.month}-${now.year}";
+    return "${now.day}-${now.month}-${now.year} ${now.hour}:${now.minute}";
   }
 }

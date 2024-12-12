@@ -19,16 +19,10 @@ class appBar extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: const [
           BoxShadow(
-            color: Colors.grey,
-            offset: Offset(3.0, 3.0),
+            color: Color.fromARGB(255, 157, 157, 157),
+            offset: Offset(3, 3),
             blurRadius: 6.0,
             spreadRadius: 1.0,
-          ),
-          BoxShadow(
-            color: Colors.white,
-            offset: Offset(0.0, 0.0),
-            blurRadius: 0.0,
-            spreadRadius: 0.0,
           ),
         ],
         borderRadius: const BorderRadius.only(
@@ -97,8 +91,9 @@ class appBar extends StatelessWidget {
                           color: Colors.transparent,
                         ),
                         child: CustomDropdown(
-                          closedHeaderPadding: EdgeInsets.all(0),
-                          // hintText: "Pilih Kota",
+                          closedHeaderPadding:
+                              EdgeInsets.symmetric(horizontal: 20),
+                          hintText: "Pilih Kota",
                           items: appBarC.regencies.map((regency) {
                             return regency.name;
                           }).toList(),
@@ -111,25 +106,25 @@ class appBar extends StatelessWidget {
                             }
                           },
                           decoration: CustomDropdownDecoration(
-                            expandedFillColor: Colors.white,
+                            expandedFillColor: Colors.black.withOpacity(0.8),
                             closedFillColor: Colors.transparent,
                             headerStyle: TextStyle(
                               fontFamily: "NunitoSans",
-                              fontWeight: FontWeight.w800,
-                              fontSize: wp * 0.05,
+                              fontWeight: FontWeight.w600,
+                              fontSize: wp * 0.045,
                               color: Colors.white,
                             ),
                             listItemStyle: TextStyle(
                               fontFamily: "NunitoSans",
                               fontWeight: FontWeight.w600,
                               fontSize: wp * 0.04,
-                              color: Colors.black,
+                              color: Colors.white,
                             ),
                             hintStyle: TextStyle(
                               fontFamily: "NunitoSans",
                               fontWeight: FontWeight.w600,
                               fontSize: wp * 0.04,
-                              color: Color.fromARGB(255, 186, 186, 186),
+                              color: const Color.fromARGB(255, 193, 193, 193),
                             ),
                             closedSuffixIcon: Icon(
                               Icons.arrow_drop_down,
@@ -142,14 +137,17 @@ class appBar extends StatelessWidget {
                           ),
                         ));
                   }),
-                  Container(
-                    child: Text(
-                      appBarC.getFormattedDate(),
-                      style: TextStyle(
-                        fontFamily: "NunitoSans",
-                        fontWeight: FontWeight.w600,
-                        fontSize: wp * 0.029,
-                        color: Colors.white,
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Container(
+                      child: Text(
+                        appBarC.getFormattedDate(),
+                        style: TextStyle(
+                          fontFamily: "NunitoSans",
+                          fontWeight: FontWeight.w600,
+                          fontSize: wp * 0.029,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
