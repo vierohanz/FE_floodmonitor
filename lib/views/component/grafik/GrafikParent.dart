@@ -65,7 +65,7 @@ List<Map<String, dynamic>> getMaxValuesPerDay(List<Map<String, dynamic>> data) {
 }
 
 class _GrafikTabState extends State<GrafikTab> {
-  late int selectedRegencyId;
+  late int? selectedRegencyId;
   late double selectedRegencyLatitude;
   late double selectedRegencyLongitude;
   late String selectedRegencyName;

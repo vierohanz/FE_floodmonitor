@@ -96,7 +96,7 @@ class _StatusParentState extends State<StatusParent> {
                       );
                     } else {
                       return Center(
-                        child: Text('No data available for this city'),
+                        child: Text('No data showed'),
                       );
                     }
                   } else {
