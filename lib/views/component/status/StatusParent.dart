@@ -58,9 +58,9 @@ class _StatusParentState extends State<StatusParent> {
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (snapshot.hasData) {
-                  if (selectedRegencyName.isNotEmpty) {
-                    // Gunakan selectedRegencyName
-                    // Filter data berdasarkan device_id sesuai kota yang dipilih
+                  if (selectedRegencyName.isNotEmpty &&
+                      selectedRegencyName != 'unknown') {
+                    // Gunakan selectedRegencyName untuk memfilter data
                     final cityDeviceIds =
                         deviceIdsByCity[selectedRegencyName] ?? [];
                     final filteredData = snapshot.data!
@@ -95,10 +95,17 @@ class _StatusParentState extends State<StatusParent> {
                       );
                     } else {
                       return Center(
-                          child: Text('No data available for this city'));
+                        child: Text('No data available for this city'),
+                      );
                     }
                   } else {
-                    return Center(child: Text('Please select a city'));
+                    // Tampilkan pesan "Pilih kota terlebih dahulu" jika nama kota tidak valid
+                    return Center(
+                      child: Text(
+                        'Pilih kota terlebih dahulu',
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                    );
                   }
                 } else {
                   return Center(child: Text('No data available'));
