@@ -63,9 +63,63 @@ class KetinggianAir extends StatelessWidget {
                               return FlSpot(index, waterLevelDouble);
                             }
                           }).toList(),
-                          color: const Color.fromARGB(255, 52, 136, 255),
+                          color: const Color.fromARGB(255, 40, 40, 40),
                           isCurved: false,
                           barWidth: 2,
+                          dotData: FlDotData(
+                            show: true,
+                            getDotPainter: (spot, percent, barData, index) {
+                              if (spot.y < 50) {
+                                return FlDotCirclePainter(
+                                  radius: 4,
+                                  color: const Color.fromARGB(
+                                      255, 191, 191, 191), // Hujan ringan
+                                  strokeColor:
+                                      const Color.fromARGB(255, 177, 177, 177),
+                                );
+                              }
+                              // Logika untuk menentukan warna titik berdasarkan curah hujan
+                              else if (spot.y >= 50 && spot.y <= 125) {
+                                return FlDotCirclePainter(
+                                  radius: 4,
+                                  color: Colors.green, // Hujan ringan
+                                  strokeColor: Colors.greenAccent,
+                                );
+                              } else if (spot.y > 125 && spot.y <= 175) {
+                                return FlDotCirclePainter(
+                                  radius: 4,
+                                  color: const Color.fromARGB(
+                                      255, 251, 230, 37), // Hujan sedang
+                                  strokeColor: Colors.yellowAccent,
+                                );
+                              } else if (spot.y > 175 && spot.y <= 250) {
+                                return FlDotCirclePainter(
+                                  radius: 4,
+                                  color: Colors.orange, // Hujan lebat
+                                  strokeColor: Colors.orangeAccent,
+                                );
+                              } else if (spot.y > 250 && spot.y <= 300) {
+                                return FlDotCirclePainter(
+                                  radius: 4,
+                                  color: Colors.red, // Hujan sangat lebat
+                                  strokeColor: Colors.redAccent,
+                                );
+                              } else if (spot.y > 300) {
+                                return FlDotCirclePainter(
+                                  radius: 4,
+                                  color: const Color.fromARGB(
+                                      255, 195, 0, 255), // Tidak ada kategori
+                                  strokeColor: Color.fromARGB(255, 195, 0, 255),
+                                );
+                              } else {
+                                return FlDotCirclePainter(
+                                  radius: 4,
+                                  color: Colors.grey, // Tidak ada kategori
+                                  strokeColor: Colors.grey,
+                                );
+                              }
+                            },
+                          ),
                         ),
                       ],
                       titlesData: FlTitlesData(
@@ -128,6 +182,29 @@ class KetinggianAir extends StatelessWidget {
                           sideTitles: SideTitles(reservedSize: 10),
                         ),
                       ),
+
+                      lineTouchData: LineTouchData(
+                        touchTooltipData: LineTouchTooltipData(
+                          getTooltipItems: (touchedSpots) {
+                            return touchedSpots.map((spot) {
+                              final waterLevel = spot.y.toStringAsFixed(1);
+                              return LineTooltipItem(
+                                '$waterLevel cm', // Menambahkan "mm" di nilai tooltip
+                                const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              );
+                            }).toList();
+                          },
+                        ),
+                        touchCallback:
+                            (FlTouchEvent event, LineTouchResponse? response) {
+                          // Callback jika Anda ingin menambahkan aksi lain saat titik disentuh
+                        },
+                        handleBuiltInTouches: true,
+                      ),
                       // Grid dan batas grafik
                       gridData: FlGridData(show: true),
                       borderData: FlBorderData(
@@ -142,6 +219,87 @@ class KetinggianAir extends StatelessWidget {
                     ),
                   ),
                 ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            child: Row(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          color: Colors.green,
+                        ),
+                        SizedBox(width: 5),
+                        Text('Normal (50-125 cm)',
+                            style: TextStyle(fontSize: 10)),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          color: Colors.yellow,
+                        ),
+                        SizedBox(width: 5),
+                        Text('Siaga 1 (125-175 cm)',
+                            style: TextStyle(fontSize: 10)),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          color: Colors.orange,
+                        ),
+                        SizedBox(width: 5),
+                        Text('Siaga 2 (175-250 cm)',
+                            style: TextStyle(fontSize: 10)),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          color: Colors.red,
+                        ),
+                        SizedBox(width: 5),
+                        Text('Siaga 3 (250> cm)',
+                            style: TextStyle(fontSize: 10)),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
