@@ -55,13 +55,57 @@ class CurahHujan extends StatelessWidget {
                                 double.tryParse(entry.value['rainfall']) ?? 0.0;
                             return FlSpot(index, rainfall);
                           }).toList(),
-                          color: const Color.fromARGB(255, 52, 136, 255),
+                          color: const Color.fromARGB(255, 40, 40, 40),
                           isCurved: false,
                           barWidth: 2,
+                          dotData: FlDotData(
+                            show: true,
+                            getDotPainter: (spot, percent, barData, index) {
+                              // Logika untuk menentukan warna titik berdasarkan curah hujan
+                              if (spot.y >= 0.5 && spot.y <= 20) {
+                                return FlDotCirclePainter(
+                                  radius: 4,
+                                  color: Colors.green, // Hujan ringan
+                                  strokeColor: Colors.greenAccent,
+                                );
+                              } else if (spot.y > 20 && spot.y <= 50) {
+                                return FlDotCirclePainter(
+                                  radius: 4,
+                                  color: const Color.fromARGB(
+                                      255, 251, 230, 37), // Hujan sedang
+                                  strokeColor: Colors.yellowAccent,
+                                );
+                              } else if (spot.y > 50 && spot.y <= 100) {
+                                return FlDotCirclePainter(
+                                  radius: 4,
+                                  color: Colors.orange, // Hujan lebat
+                                  strokeColor: Colors.orangeAccent,
+                                );
+                              } else if (spot.y > 100 && spot.y <= 150) {
+                                return FlDotCirclePainter(
+                                  radius: 4,
+                                  color: Colors.red, // Hujan sangat lebat
+                                  strokeColor: Colors.redAccent,
+                                );
+                              } else if (spot.y > 150) {
+                                return FlDotCirclePainter(
+                                  radius: 4,
+                                  color: const Color.fromARGB(
+                                      255, 195, 0, 255), // Tidak ada kategori
+                                  strokeColor: Color.fromARGB(255, 195, 0, 255),
+                                );
+                              } else {
+                                return FlDotCirclePainter(
+                                  radius: 4,
+                                  color: Colors.grey, // Tidak ada kategori
+                                  strokeColor: Colors.grey,
+                                );
+                              }
+                            },
+                          ),
                         ),
                       ],
                       titlesData: FlTitlesData(
-                        // Label untuk sumbu X (tanggal)
                         bottomTitles: AxisTitles(
                           sideTitles: SideTitles(
                             showTitles: true,
@@ -70,19 +114,15 @@ class CurahHujan extends StatelessWidget {
                             getTitlesWidget: (value, meta) {
                               if (value.toInt() >= 0 &&
                                   value.toInt() < data.length) {
-                                final date = data[value.toInt()]
-                                    ['date']; // Ambil tanggal yang sudah diolah
-
+                                final date = data[value.toInt()]['date'];
                                 if (date != null && date.isNotEmpty) {
                                   try {
-                                    // Mengubah tanggal dari format 'YYYY-MM-DD' menjadi DateTime
                                     final parsedDate = DateTime.parse(date);
                                     return Text(
-                                      '${parsedDate.day}', // Menampilkan hanya hari (misalnya "29")
+                                      '${parsedDate.day}',
                                       style: TextStyle(fontSize: 10),
                                     );
                                   } catch (e) {
-                                    // Jika parsing gagal, tampilkan 'Invalid'
                                     return Text(
                                       'Invalid',
                                       style: TextStyle(fontSize: 10),
@@ -90,7 +130,7 @@ class CurahHujan extends StatelessWidget {
                                   }
                                 } else {
                                   return Text(
-                                    'No Date', // Tampilkan 'No Date' jika tidak ada tanggal
+                                    'No Date',
                                     style: TextStyle(fontSize: 10),
                                   );
                                 }
@@ -99,20 +139,18 @@ class CurahHujan extends StatelessWidget {
                             },
                           ),
                         ),
-                        // Label untuk sumbu Y (nilai curah hujan)
                         leftTitles: AxisTitles(
                           sideTitles: SideTitles(
                             showTitles: true,
                             reservedSize: 30,
                             getTitlesWidget: (value, meta) {
                               return Text(
-                                value.toStringAsFixed(0),
+                                '${value.toStringAsFixed(0)}',
                                 style: TextStyle(fontSize: 12),
                               );
                             },
                           ),
                         ),
-                        // Sumbu kanan dan atas tidak digunakan
                         rightTitles: AxisTitles(
                           sideTitles: SideTitles(reservedSize: 10),
                         ),
@@ -120,7 +158,29 @@ class CurahHujan extends StatelessWidget {
                           sideTitles: SideTitles(reservedSize: 10),
                         ),
                       ),
-                      // Grid dan batas grafik
+                      // Menambahkan interaksi pada grafik
+                      lineTouchData: LineTouchData(
+                        touchTooltipData: LineTouchTooltipData(
+                          getTooltipItems: (touchedSpots) {
+                            return touchedSpots.map((spot) {
+                              final rainfall = spot.y.toStringAsFixed(1);
+                              return LineTooltipItem(
+                                '$rainfall mm',
+                                const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              );
+                            }).toList();
+                          },
+                        ),
+                        touchCallback:
+                            (FlTouchEvent event, LineTouchResponse? response) {
+                          // Callback jika Anda ingin menambahkan aksi lain saat titik disentuh
+                        },
+                        handleBuiltInTouches: true,
+                      ),
                       gridData: FlGridData(show: true),
                       borderData: FlBorderData(
                         show: true,
@@ -129,11 +189,90 @@ class CurahHujan extends StatelessWidget {
                       minX: 0,
                       maxX: (data.length - 1).toDouble(),
                       minY: 0,
-                      maxY:
-                          150, // Sesuaikan dengan rentang curah hujan maksimal
+                      maxY: 200,
                     ),
                   ),
                 ),
+          // Informasi mengenai warna
+          SizedBox(height: 10),
+          Container(
+            child: Row(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          color: Colors.green,
+                        ),
+                        SizedBox(width: 5),
+                        Text('Ringan (0.5-20 mm/hari)',
+                            style: TextStyle(fontSize: 10)),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          color: Colors.yellow,
+                        ),
+                        SizedBox(width: 5),
+                        Text('Sedang (20-50 mm/hari)',
+                            style: TextStyle(fontSize: 10)),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          color: Colors.orange,
+                        ),
+                        SizedBox(width: 5),
+                        Text('Lebat (50-100 mm/hari)',
+                            style: TextStyle(fontSize: 10)),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          color: Colors.red,
+                        ),
+                        SizedBox(width: 5),
+                        Text('Sangat Lebat (100-150 mm/hari)',
+                            style: TextStyle(fontSize: 10)),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
