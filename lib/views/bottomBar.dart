@@ -26,10 +26,7 @@ class bottomBar extends StatelessWidget {
           child: PageView(
             physics: NeverScrollableScrollPhysics(),
             controller: bottomBarC.pageController,
-            children: [
-              homePage(),
-              messagePage(),
-            ],
+            children: [homePage(), messagePage()],
             onPageChanged: (index) {
               bottomBarC.changePage(index);
             },
@@ -65,6 +62,11 @@ class bottomBar extends StatelessWidget {
                   title: Text('Message'),
                   activeColor: Colors.red,
                 ),
+                // BottomBarItem(
+                //   icon: FaIcon(FontAwesomeIcons.facebookMessenger),
+                //   title: Text('Message'),
+                //   activeColor: Colors.red,
+                // ),
               ],
             ),
           )),

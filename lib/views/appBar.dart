@@ -1,18 +1,19 @@
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
-import 'package:flood_monitor/controllers/appBarController.dart';
-import 'package:flood_monitor/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
+import 'package:flood_monitor/controllers/appBarController.dart';
+import 'package:flood_monitor/controllers/statusController.dart'; // Import StatusController
+import 'package:flood_monitor/utils/color.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class appBar extends StatelessWidget {
   final appBarController appBarC = Get.put(appBarController());
+  final StatusController statusC = Get.put(StatusController());
 
   @override
   Widget build(BuildContext context) {
     final hp = MediaQuery.of(context).size.height;
     final wp = MediaQuery.of(context).size.width;
-
-    // Trigger fetching regencies when the view is created
 
     return Container(
       height: hp * 0.18,
@@ -46,7 +47,6 @@ class appBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Banjir Text Box
             Container(
               width: wp * 0.3,
               margin: const EdgeInsets.all(10),
@@ -56,18 +56,72 @@ class appBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Center(
-                child: Text(
-                  "BANJIR",
-                  style: TextStyle(
-                    fontFamily: "NunitoSans",
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: wp * 0.04,
-                  ),
+                child: FutureBuilder<List<Map<String, dynamic>>>(
+                  future: statusC.getFilteredData(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return LoadingAnimationWidget.stretchedDots(
+                        color: Colors.white,
+                        size: wp * 0.09,
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                        'Error: ${snapshot.error}',
+                        style: TextStyle(
+                          fontFamily: "NunitoSans",
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: wp * 0.04,
+                        ),
+                      );
+                    } else if (snapshot.hasData) {
+                      final filteredData = snapshot.data!;
+                      print('Filtered data: $filteredData'); // Debug print
+
+                      if (filteredData.isNotEmpty) {
+                        String statusText =
+                            statusC.getComparisonResult(filteredData);
+                        print('Status text: $statusText'); // Debug print
+
+                        double fontSize =
+                            statusText.length > 5 ? wp * 0.035 : wp * 0.04;
+                        return Text(
+                          statusText,
+                          style: TextStyle(
+                            fontFamily: "NunitoSans",
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: fontSize,
+                          ),
+                        );
+                      } else {
+                        return const Text(
+                          'No data available',
+                          style: TextStyle(
+                            fontFamily: "NunitoSans",
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 4,
+                          ),
+                        );
+                      }
+                    } else {
+                      return const Text(
+                        'No data available',
+                        style: TextStyle(
+                          fontFamily: "NunitoSans",
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 4,
+                        ),
+                      );
+                    }
+                  },
                 ),
               ),
             ),
 
+            // Rest of the code remains the same
             Container(
               width: wp * 0.47,
               height: hp * 1,
@@ -77,7 +131,13 @@ class appBar extends StatelessWidget {
                 children: [
                   Obx(() {
                     if (appBarC.isLoading.value) {
-                      return const Center(child: CircularProgressIndicator());
+                      return Center(
+                        child: LoadingAnimationWidget.stretchedDots(
+                          color: Colors.white,
+                          size: wp * 0.07,
+                        ),
+                      );
+                      ;
                     }
                     if (appBarC.regencies.isEmpty) {
                       return const Text(
