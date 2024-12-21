@@ -1,8 +1,7 @@
-import 'package:flood_monitor/utils/color.dart';
+import 'package:flood_monitor/views/appBar.dart';
 import 'package:flood_monitor/views/component/maps/mapView.dart';
 import './component/ObjekTab.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class homePage extends StatelessWidget {
   @override
@@ -17,6 +16,8 @@ class homePage extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(200.0), child: appBar()),
         backgroundColor: Color(0xFFEBF0F7),
         body: SingleChildScrollView(
           child: Container(
