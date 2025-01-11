@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flood_monitor/models/mapModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class mapController extends GetxController {
   var selectedValue = RxnString();
@@ -15,7 +17,6 @@ class mapController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _startListeningToPreferences();
     regencyNotifier = ValueNotifier<Map<String, dynamic>>({
       'selectedRegencyId': 0,
       'selectedRegencyName': 'Unknown',
@@ -24,10 +25,10 @@ class mapController extends GetxController {
     });
 
     _loadSelectedRegency();
-    loadSelectedValue();
+    loadMapData();
     _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       _loadSelectedRegency();
-      loadSelectedValue();
+      loadMapData();
     });
   }
 
@@ -37,38 +38,85 @@ class mapController extends GetxController {
     super.onClose();
   }
 
-// Listen to preference changes
-  Future<void> _startListeningToPreferences() async {
-    _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      _loadSelectedRegency();
-      loadSelectedValue();
-    });
+  // Load map data from API using regency ID from shared preferences
+  Future<void> loadMapData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final regencyId = prefs.getInt('selectedRegencyId') ?? 0;
+
+    try {
+      final response = await http.get(
+        Uri.parse(
+            'https://api.cerdaspantaubanjir.my.id/devices?regency=$regencyId'),
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> devices = json.decode(response.body);
+
+        if (devices.isNotEmpty) {
+          List<String> names = [];
+          List<LatLng> points = [];
+
+          for (var device in devices) {
+            final name = device['device_name'] ?? 'Unknown';
+            final latitude =
+                double.tryParse(device['latitude'] ?? '0.0') ?? 0.0;
+            final longitude =
+                double.tryParse(device['longitude'] ?? '0.0') ?? 0.0;
+
+            names.add(name);
+            points.add(LatLng(latitude, longitude));
+          }
+
+          mapData.update((data) {
+            data?.nameLocation = names;
+            data?.pointLocation = points;
+          });
+
+          if (points.isNotEmpty) {
+            selectedValue.value = names.first;
+
+            if (points.length == 1) {
+              if (googleMapController != null) {
+                googleMapController!.animateCamera(
+                  CameraUpdate.newLatLngZoom(points.first, 12.0),
+                );
+              }
+            } else {
+              LatLngBounds bounds = _calculateBounds(points);
+              if (googleMapController != null) {
+                googleMapController!.animateCamera(
+                  CameraUpdate.newLatLngBounds(bounds, 50),
+                );
+              }
+            }
+          }
+        }
+      } else {
+        print('Failed to load devices: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching devices: $e');
+    }
   }
 
-// Load selected value from shared preferences
-  Future<void> loadSelectedValue() async {
-    final prefs = await SharedPreferences.getInstance();
-    final savedId = prefs.getInt('selectedRegencyId') ?? 0;
-    final savedName = prefs.getString('selectedRegencyName') ?? "unknown";
-    final savedLatitude = prefs.getDouble('selectedRegencyLatitude') ?? 0.0;
-    final savedLongitude = prefs.getDouble('selectedRegencyLongitude') ?? 0.0;
+  // Calculate LatLngBounds for multiple points
+  LatLngBounds _calculateBounds(List<LatLng> points) {
+    double south = points.first.latitude;
+    double north = points.first.latitude;
+    double west = points.first.longitude;
+    double east = points.first.longitude;
 
-    // Skip if the name has not changed
-    if (selectedValue.value == savedName) {
-      return;
+    for (LatLng point in points) {
+      if (point.latitude < south) south = point.latitude;
+      if (point.latitude > north) north = point.latitude;
+      if (point.longitude < west) west = point.longitude;
+      if (point.longitude > east) east = point.longitude;
     }
-    LatLng point = LatLng(savedLatitude, savedLongitude);
-    mapData.update((data) {
-      data?.nameLocation = [savedName];
-      data?.pointLocation = [point];
-    });
 
-    selectedValue.value = savedName;
-    if (googleMapController != null) {
-      googleMapController!.animateCamera(
-        CameraUpdate.newLatLngZoom(point, 12.0),
-      );
-    }
+    return LatLngBounds(
+      southwest: LatLng(south, west),
+      northeast: LatLng(north, east),
+    );
   }
 
   // Fetch and update regency data from shared preferences

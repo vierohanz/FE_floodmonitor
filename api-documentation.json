@@ -1,0 +1,216 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Device API",
+    "version": "1.0.0",
+    "description": "API for managing devices, regencies, broadcasts, and sensor activities."
+  },
+  "paths": {
+    "/devices": {
+      "get": {
+        "summary": "Fetch all devices",
+        "parameters": [
+          {
+            "name": "regency",
+            "in": "query",
+            "description": "Filters devices by regency ID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of devices",
+            "content": {
+              "application/json": {
+                "example": [{ "id": 1, "name": "Device A", "regency_name": "Regency X" }]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/regencies": {
+      "get": {
+        "summary": "Fetch all regencies",
+        "responses": {
+          "200": {
+            "description": "List of regencies",
+            "content": {
+              "application/json": {
+                "example": [{ "id": 1, "name": "Regency X" }]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/broadcast-list": {
+      "get": {
+        "summary": "Fetch all broadcast lists",
+        "responses": {
+          "200": {
+            "description": "List of broadcast lists",
+            "content": {
+              "application/json": {
+                "example": [{ "id": 1, "title": "Broadcast A" }]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/broadcast-list/{id}": {
+      "get": {
+        "summary": "Fetch a specific broadcast list",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the broadcast list",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Broadcast list details",
+            "content": {
+              "application/json": {
+                "example": { "id": 1, "title": "Broadcast A" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sensor-activities": {
+      "get": {
+        "summary": "Fetch sensor activities with optional filters",
+        "parameters": [
+          {
+            "name": "device",
+            "in": "query",
+            "description": "Filters by device ID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "regency",
+            "in": "query",
+            "description": "Filters by regency ID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Start date range (default: 30 days back)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "End date range (default: today)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of sensor activities",
+            "content": {
+              "application/json": {
+                "example": [{ "id": 1, "device_id": "Device A", "water_level": 20, "rainfall": 5 }]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/save-sensor-activity": {
+      "post": {
+        "summary": "Save sensor activity data",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "device_id": "Device A",
+                "water_level": 20,
+                "rainfall": 5,
+                "wind_speed": 15,
+                "image": "base64encodedstring"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Sensor activity saved"
+          }
+        }
+      }
+    },
+    "/activities/monthly": {
+      "get": {
+        "summary": "Fetch monthly water level readings",
+        "parameters": [
+          {
+            "name": "device",
+            "in": "query",
+            "description": "Filters by device ID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "regency",
+            "in": "query",
+            "description": "Filters by regency ID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "Month to filter (default: current month)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of activities",
+            "content": {
+              "application/json": {
+                "example": [{ "date": "2023-06-01", "water_level": 25 }]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

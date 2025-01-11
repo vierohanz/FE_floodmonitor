@@ -45,7 +45,7 @@ class bottomBar extends StatelessWidget {
                 ),
               ],
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 70),
+            padding: const EdgeInsets.symmetric(horizontal: 66),
             child: BottomBar(
               selectedIndex: bottomBarC.model.currentPage.value,
               onTap: (int index) {
@@ -58,15 +58,10 @@ class bottomBar extends StatelessWidget {
                   activeColor: Colors.blue,
                 ),
                 BottomBarItem(
-                  icon: FaIcon(FontAwesomeIcons.facebookMessenger),
-                  title: Text('Message'),
-                  activeColor: Colors.red,
+                  icon: FaIcon(FontAwesomeIcons.solidUser),
+                  title: Text('Profile'),
+                  activeColor: Colors.green,
                 ),
-                // BottomBarItem(
-                //   icon: FaIcon(FontAwesomeIcons.facebookMessenger),
-                //   title: Text('Message'),
-                //   activeColor: Colors.red,
-                // ),
               ],
             ),
           )),
