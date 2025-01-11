@@ -55,7 +55,7 @@ class StatusTerakhir1Tab extends StatelessWidget {
                     StackTrace? stackTrace) {
                   // Display a default image when an error occurs
                   return Image.asset(
-                    'assets/images/example.png', // Path to your default image
+                    'assets/images/default.png', // Path to your default image
                     width: 100,
                     height: 100,
                   );

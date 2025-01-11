@@ -108,6 +108,9 @@ class StatusController extends GetxController {
     } else if (status1.toLowerCase() == 'tidak banjir' &&
         status2.toLowerCase() == 'NA') {
       result = 'Tidak Banjir';
+    } else if (status1.toLowerCase() == 'banjir' &&
+        status2.toLowerCase() == 'NA') {
+      result = 'Tidak Banjir';
     } else if (status1.toLowerCase() == 'NA' &&
         status2.toLowerCase() == 'tidak banjir') {
       result = 'Tidak Banjir';

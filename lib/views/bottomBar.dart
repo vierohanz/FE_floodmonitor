@@ -1,8 +1,7 @@
 import 'package:flood_monitor/utils/color.dart';
 import 'package:flood_monitor/views/appBar.dart';
 import 'package:flood_monitor/views/homePage.dart';
-import 'package:flood_monitor/views/messagePage.dart';
-import 'package:flood_monitor/views/profilePage.dart';
+import 'package:flood_monitor/views/profileScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -18,15 +17,13 @@ class bottomBar extends StatelessWidget {
     final hp = MediaQuery.of(context).size.height;
     final wp = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar:
-          PreferredSize(preferredSize: Size.fromHeight(200.0), child: appBar()),
       body: Container(
         decoration: BoxDecoration(color: Color(0xFFEBF0F7)),
         child: Container(
           child: PageView(
             physics: NeverScrollableScrollPhysics(),
             controller: bottomBarC.pageController,
-            children: [homePage(), messagePage()],
+            children: [homePage(), ProfileScreen()],
             onPageChanged: (index) {
               bottomBarC.changePage(index);
             },
@@ -58,10 +55,21 @@ class bottomBar extends StatelessWidget {
                   activeColor: Colors.blue,
                 ),
                 BottomBarItem(
-                  icon: FaIcon(FontAwesomeIcons.solidUser),
-                  title: Text('Profile'),
-                  activeColor: Colors.green,
+                  icon: FaIcon(
+                    FontAwesomeIcons.solidUser,
+                    size: wp * 0.04, // Ubah ukuran ikon di sini
+                  ),
+                  title: Text(
+                    'Profile',
+                  ),
+                  activeColor: Colors.red,
                 ),
+
+                // BottomBarItem(
+                //   icon: FaIcon(FontAwesomeIcons.facebookMessenger),
+                //   title: Text('Message'),
+                //   activeColor: Colors.red,
+                // ),
               ],
             ),
           )),

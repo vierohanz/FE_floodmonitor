@@ -289,7 +289,9 @@ class _StatusParentState extends State<StatusParent> {
                           ),
                         );
                       } else {
-                        return _buildShimmerPlaceholder();
+                        return Center(
+                          child: Text('No data available'),
+                        );
                       }
                     } else {
                       return Center(child: Text('No data available'));
