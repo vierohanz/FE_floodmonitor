@@ -78,22 +78,17 @@ class mapController extends GetxController {
             selectedValue.value = names.first;
 
             if (isFirstTimeSwitchingCity) {
+              LatLngBounds bounds = _calculateBounds(points);
               if (googleMapController != null) {
-                // Hanya geser kamera saat pertama kali pindah kota
+                // googleMapController!.animateCamera(
+                //   CameraUpdate.newLatLngZoom(points.first, 16.0),
+                // );
+
                 googleMapController!.animateCamera(
-                  CameraUpdate.newLatLngZoom(points.first, 16.0),
+                  CameraUpdate.newLatLngBounds(bounds, 50),
                 );
               }
-              isFirstTimeSwitchingCity =
-                  false; // Tandai bahwa kota sudah dipindahkan
-            } else {
-              // Jangan geser kamera jika sudah dipindahkan sebelumnya
-              // LatLngBounds bounds = _calculateBounds(points);
-              // if (googleMapController != null) {
-              //   googleMapController!.animateCamera(
-              //     CameraUpdate.newLatLngBounds(bounds, 50),
-              //   );
-              // }
+              isFirstTimeSwitchingCity = false;
             }
           }
         }

@@ -55,28 +55,35 @@ class appBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                width: wp * 0.3,
-                margin: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  border: Border.all(width: 3, color: Colors.white),
-                  color: Colors.amber[800],
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Center(
-                    child: ValueListenableBuilder<String>(
+                child: ValueListenableBuilder<String>(
                   valueListenable: statusC.comparisonResultNotifier,
                   builder: (context, comparisonResult, child) {
-                    return Text(
-                      '$comparisonResult',
-                      style: TextStyle(
-                        fontFamily: "NunitoSans",
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 15,
+                    return Container(
+                      width: wp * 0.3,
+                      margin: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 3, color: Colors.white),
+                        color: comparisonResult == 'Banjir'
+                            ? Colors.red[400]
+                            : comparisonResult == "Tidak Banjir"
+                                ? Colors.green[400]
+                                : Colors.amber[400],
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '$comparisonResult',
+                          style: TextStyle(
+                            fontFamily: "NunitoSans",
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 15,
+                          ),
+                        ),
                       ),
                     );
                   },
-                )),
+                ),
               ),
 
               // Rest of the code remains the same
@@ -129,7 +136,7 @@ class appBar extends StatelessWidget {
                               headerStyle: TextStyle(
                                 fontFamily: "NunitoSans",
                                 fontWeight: FontWeight.w600,
-                                fontSize: wp * 0.045,
+                                fontSize: wp * 0.04,
                                 color: Colors.white,
                               ),
                               listItemStyle: TextStyle(

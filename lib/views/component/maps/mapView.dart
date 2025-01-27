@@ -11,18 +11,14 @@ class mapView extends StatelessWidget {
   Widget build(BuildContext context) {
     final mapC = Get.put(mapController());
     mapC.loadMapData();
-
-    // Menyimpan id marker yang dipilih
     Rx<String?> selectedMarkerId = Rx<String?>(null);
-    LatLng? initialPosition; // Menyimpan posisi awal kamera
+    LatLng? initialPosition;
 
     return Scaffold(
       body: Obx(() {
         if (mapC.mapData.value.pointLocation.isEmpty) {
           return Center(child: CircularProgressIndicator());
         }
-
-        // Mendapatkan posisi awal dari data perangkat
         if (initialPosition == null) {
           initialPosition = mapC.mapData.value.pointLocation.first;
         }
@@ -31,15 +27,14 @@ class mapView extends StatelessWidget {
           onMapCreated: (GoogleMapController controller) {
             mapC.setGoogleMapController(controller);
             if (selectedMarkerId.value == null) {
-              // Jika tidak ada marker yang dipilih, posisikan kamera di awal
               mapC.googleMapController?.animateCamera(
                 CameraUpdate.newLatLng(initialPosition!),
               );
             }
           },
           initialCameraPosition: CameraPosition(
-            target: initialPosition!, // Posisikan kamera di awal
-            zoom: 20, // Atur zoom pada level penuh
+            target: initialPosition!,
+            zoom: 20,
           ),
           markers:
               mapC.mapData.value.pointLocation.asMap().entries.map((entry) {

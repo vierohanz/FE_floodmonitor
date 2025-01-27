@@ -48,6 +48,6 @@ class ObjekTab extends StatelessWidget {
   }
 }
 
-void main() {
-  runApp(MaterialApp(home: Scaffold(body: ObjekTab())));
-}
+// void main() {
+//   runApp(MaterialApp(home: Scaffold(body: ObjekTab())));
+// }

@@ -49,19 +49,21 @@ class StatusTerakhir1Tab extends StatelessWidget {
             children: [
               Image.network(
                 '${data['image_path']}',
-                width: 100, // Lebar gambar
-                height: 100, // Tinggi gambar
+                fit: BoxFit.cover,
+                width: wp * 0.26, // Lebar gambar
+                height: hp * 0.12, // Tinggi gambar
                 errorBuilder: (BuildContext context, Object error,
                     StackTrace? stackTrace) {
                   // Display a default image when an error occurs
                   return Image.asset(
-                    'assets/images/default.png', // Path to your default image
-                    width: 100,
-                    height: 100,
+                    'assets/images/default.png',
+                    fit: BoxFit.cover, // Path to your default image
+                    width: wp * 0.26,
+                    height: hp * 0.12,
                   );
                 },
               ),
-              SizedBox(width: 10), // Jarak antara teks dan gambar
+              SizedBox(width: 8), // Jarak antara teks dan gambar
               Expanded(
                 child: Column(
                   crossAxisAlignment:

@@ -78,7 +78,8 @@ class StatusController extends GetxController {
   }
 
   // Get the comparison result based on the filtered data and device ids
-  String getComparisonResult(List<Map<String, dynamic>> filteredData) {
+  Future<String> getComparisonResult(
+      List<Map<String, dynamic>> filteredData) async {
     final statusTerakhir1Data = getStatusData(filteredData, [1, 3]);
     final statusTerakhir2Data = getStatusData(filteredData, [2, 4]);
 
@@ -109,7 +110,7 @@ class StatusController extends GetxController {
     } else if (status1 == 'na' && status2 == 'tidak banjir') {
       result = 'Tidak Banjir';
     } else {
-      result = '...';
+      result = 'banjir';
     }
 
     return result;
@@ -117,11 +118,17 @@ class StatusController extends GetxController {
 
   // Start periodically checking the comparison result
   void _startPeriodicComparisonUpdate() {
-    _comparisonTimer = Timer.periodic(Duration(seconds: 5), (_) async {
-      final filteredData = await getFilteredData();
-      final result = getComparisonResult(filteredData);
-      print('Comparison Result: $result');
-      comparisonResultNotifier.value = result; // Update the ValueNotifier
+    Timer.periodic(Duration(seconds: 5), (_) async {
+      try {
+        final filteredData =
+            await getFilteredData(); // Ambil data yang sudah difilter
+        final result = await getComparisonResult(
+            filteredData); // Dapatkan hasil perbandingan
+        print('Comparison Result: $result');
+        comparisonResultNotifier.value = result; // Update hasil perbandingan
+      } catch (e) {
+        print('Error during comparison update: $e');
+      }
     });
   }
 
