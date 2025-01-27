@@ -1,7 +1,10 @@
 import 'package:flood_monitor/controllers/mapController.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:gestures/gestures.dart';
 
 class mapView extends StatelessWidget {
   @override
@@ -36,7 +39,7 @@ class mapView extends StatelessWidget {
           },
           initialCameraPosition: CameraPosition(
             target: initialPosition!, // Posisikan kamera di awal
-            zoom: 5,
+            zoom: 20, // Atur zoom pada level penuh
           ),
           markers:
               mapC.mapData.value.pointLocation.asMap().entries.map((entry) {
@@ -72,7 +75,12 @@ class mapView extends StatelessWidget {
             print('Camera moved to: ${position.target}');
           },
           onCameraIdle: () {},
-          minMaxZoomPreference: MinMaxZoomPreference(3, 12),
+          // Perluas batas zoom minimum dan maksimum untuk memperbolehkan zoom penuh
+          minMaxZoomPreference: MinMaxZoomPreference(1, 20), // Maksimalkan zoom
+          gestureRecognizers: {
+            Factory<OneSequenceGestureRecognizer>(
+                () => EagerGestureRecognizer())
+          }, // Tambahkan gestureRecognizers
         );
       }),
     );

@@ -1,9 +1,7 @@
-import 'package:flood_monitor/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flood_monitor/views/component/status/StatusTerakhir_1.dart';
 import 'package:flood_monitor/views/component/status/StatusTerakhir_2.dart';
 import 'package:flood_monitor/controllers/StatusController.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shimmer/shimmer.dart';
 
 class StatusParent extends StatefulWidget {

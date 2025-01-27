@@ -3,7 +3,6 @@ import 'package:flood_monitor/views/component/grafik/CurahHujan.dart';
 import 'package:flood_monitor/views/component/grafik/KecepatanAngin.dart';
 import 'package:flood_monitor/views/component/grafik/KetinggianAir.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flood_monitor/utils/apiService.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';

@@ -13,6 +13,8 @@ class mapController extends GetxController {
   GoogleMapController? googleMapController;
   late ValueNotifier<Map<String, dynamic>> regencyNotifier;
   Timer? _updateTimer;
+  bool isFirstTimeSwitchingCity =
+      true; // Flag untuk memeriksa apakah ini pertama kali pindah kota
 
   @override
   void onInit() {
@@ -75,19 +77,23 @@ class mapController extends GetxController {
           if (points.isNotEmpty) {
             selectedValue.value = names.first;
 
-            if (points.length == 1) {
+            if (isFirstTimeSwitchingCity) {
               if (googleMapController != null) {
+                // Hanya geser kamera saat pertama kali pindah kota
                 googleMapController!.animateCamera(
-                  CameraUpdate.newLatLngZoom(points.first, 12.0),
+                  CameraUpdate.newLatLngZoom(points.first, 16.0),
                 );
               }
+              isFirstTimeSwitchingCity =
+                  false; // Tandai bahwa kota sudah dipindahkan
             } else {
-              LatLngBounds bounds = _calculateBounds(points);
-              if (googleMapController != null) {
-                googleMapController!.animateCamera(
-                  CameraUpdate.newLatLngBounds(bounds, 50),
-                );
-              }
+              // Jangan geser kamera jika sudah dipindahkan sebelumnya
+              // LatLngBounds bounds = _calculateBounds(points);
+              // if (googleMapController != null) {
+              //   googleMapController!.animateCamera(
+              //     CameraUpdate.newLatLngBounds(bounds, 50),
+              //   );
+              // }
             }
           }
         }
@@ -140,6 +146,7 @@ class mapController extends GetxController {
         newRegencyData['selectedRegencyLongitude'] !=
             regencyNotifier.value['selectedRegencyLongitude']) {
       regencyNotifier.value = newRegencyData;
+      isFirstTimeSwitchingCity = true; // Reset flag ketika kota berubah
     }
   }
 

@@ -7,6 +7,7 @@ import 'package:flood_monitor/utils/apiService.dart';
 class StatusController extends GetxController {
   late Future<List<Map<String, dynamic>>> data;
   final ValueNotifier<Map<String, dynamic>> regencyNotifier;
+  final ValueNotifier<String> comparisonResultNotifier;
   Timer? _updateTimer;
   Timer? _comparisonTimer;
 
@@ -21,7 +22,8 @@ class StatusController extends GetxController {
           'selectedRegencyName': 'Unknown',
           'selectedRegencyLatitude': 0.0,
           'selectedRegencyLongitude': 0.0,
-        }) {
+        }),
+        comparisonResultNotifier = ValueNotifier<String>('...') {
     data = ApiService.fetchDataSensor();
     _startListeningToPreferences();
     _startPeriodicComparisonUpdate();
@@ -80,42 +82,34 @@ class StatusController extends GetxController {
     final statusTerakhir1Data = getStatusData(filteredData, [1, 3]);
     final statusTerakhir2Data = getStatusData(filteredData, [2, 4]);
 
-    String result;
-
-    // Extracting status and device_name
-    String status1 = statusTerakhir1Data?['status'] ?? 'NA';
+    // Mengambil nilai status dan device_name
+    String status1 = statusTerakhir1Data?['status']?.toLowerCase() ?? 'na';
     String deviceName1 =
         statusTerakhir1Data?['device_name'] ?? 'Unknown Device';
 
-    String status2 = statusTerakhir2Data?['status'] ?? 'NA';
+    String status2 = statusTerakhir2Data?['status']?.toLowerCase() ?? 'na';
     String deviceName2 =
         statusTerakhir2Data?['device_name'] ?? 'Unknown Device';
 
-    // Print device names and their statuses
-    print('Device 1: $deviceName1');
-    print('Status 1: $status1');
-    print('Device 2: $deviceName2');
-    print('Status 2: $status2');
+    // Debugging: Print nilai untuk memastikan
+    print('Device 1: $deviceName1, Status 1: $status1');
+    print('Device 2: $deviceName2, Status 2: $status2');
 
-    if (status1.toLowerCase() == 'banjir' ||
-        status2.toLowerCase() == 'banjir') {
+    String result;
+    if (status1 == 'banjir' || status2 == 'banjir') {
       result = 'Banjir';
-    } else if (status1.toLowerCase() == 'tidak banjir' &&
-        status2.toLowerCase() == 'tidak banjir') {
+    } else if (status1 == 'tidak banjir' && status2 == 'tidak banjir') {
       result = 'Tidak Banjir';
-    } else if (status1 == 'NA' && status2 == 'NA') {
+    } else if (status1 == 'na' && status2 == 'na') {
       result = 'N/A';
-    } else if (status1.toLowerCase() == 'tidak banjir' &&
-        status2.toLowerCase() == 'NA') {
+    } else if (status1 == 'tidak banjir' && status2 == 'na') {
       result = 'Tidak Banjir';
-    } else if (status1.toLowerCase() == 'banjir' &&
-        status2.toLowerCase() == 'NA') {
-      result = 'Tidak Banjir';
-    } else if (status1.toLowerCase() == 'NA' &&
-        status2.toLowerCase() == 'tidak banjir') {
+    } else if (status1 == 'banjir' && status2 == 'tidak banjir') {
+      result = 'Banjir';
+    } else if (status1 == 'na' && status2 == 'tidak banjir') {
       result = 'Tidak Banjir';
     } else {
-      result = 'Banjir';
+      result = '...';
     }
 
     return result;
@@ -127,7 +121,7 @@ class StatusController extends GetxController {
       final filteredData = await getFilteredData();
       final result = getComparisonResult(filteredData);
       print('Comparison Result: $result');
-      // Handle any UI updates or notifications here based on the result
+      comparisonResultNotifier.value = result; // Update the ValueNotifier
     });
   }
 

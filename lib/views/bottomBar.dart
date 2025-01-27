@@ -1,5 +1,3 @@
-import 'package:flood_monitor/utils/color.dart';
-import 'package:flood_monitor/views/appBar.dart';
 import 'package:flood_monitor/views/homePage.dart';
 import 'package:flood_monitor/views/profileScreen.dart';
 import 'package:flutter/material.dart';

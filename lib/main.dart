@@ -1,7 +1,5 @@
-import 'package:bottom_bar/bottom_bar.dart';
 import 'package:flood_monitor/controllers/bottomBarController.dart';
 import 'package:flood_monitor/views/bottomBar.dart';
-import 'package:flood_monitor/views/homePage.dart';
 import 'package:flood_monitor/views/splashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
