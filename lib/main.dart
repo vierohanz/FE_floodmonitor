@@ -1,5 +1,6 @@
 import 'package:flood_monitor/controllers/bottomBarController.dart';
 import 'package:flood_monitor/views/bottomBar.dart';
+import 'package:flood_monitor/views/component/login/login_screen.dart';
 import 'package:flood_monitor/views/splashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,7 +19,7 @@ class MainApp extends StatelessWidget {
       getPages: [
         GetPage(
           name: '/splash',
-          page: () => SplashScreen(),
+          page: () => LoginScreen(),
         ),
         GetPage(
           name: '/',
